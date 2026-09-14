@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# macOS / editors
+.DS_Store
+.vscode/
+
+# Secrets and local environment
+.env
+.env.*
+*.key
+
+# Generated/cache files
+.quarto/
+_site/
+.cache/
