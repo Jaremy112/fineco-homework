@@ -4,7 +4,7 @@
 - 作业页面：<https://lianxhcn.github.io/FinEco/exercises/hw-02.html>
 - 截止：2026-09-28 23:59（北京时间）
 - 所属仓库：<https://github.com/Jaremy112/fineco-homework>（本目录 `hw-02/`）
-- 进度：Notebook `hw_02-1.ipynb` 第 1—7 节已完成（选股与获取、数据检查与收益率、价格与收益图形、滚动波动率、描述统计、相关性、两类组合）；第 8 节在写作中
+- 进度：Notebook `hw_02-1.ipynb` **全部 8 节已完成**（55 单元，8 张图 + 15 张表，已运行并保存输出）
 
 本目录保存 HW02-1 的全部输入快照、下载脚本、审计文件和分析 Notebook。所有路径均为相对路径，复现时不依赖重新调用网络接口。
 
@@ -28,6 +28,7 @@ hw-02/
 │   ├── build_hw02_1_section05.py    写入 Notebook 第 5 节单元
 │   ├── build_hw02_1_section06.py    写入 Notebook 第 6 节单元
 │   ├── build_hw02_1_section07.py    写入 Notebook 第 7 节单元
+│   ├── build_hw02_1_section08.py    写入 Notebook 第 8 节单元
 │   └── run_notebook.py              用 fineco 内核原地执行 Notebook 并保存输出
 │   ├── download_wind_hw02_1.py      Wind 方案脚本（仅尝试，未采用，保留存档）
 │   └── build_hw02_1_notebook.py     Notebook 骨架构建脚本
@@ -157,7 +158,7 @@ Notebook 内核：`Python (FinEco)`，解释器路径 `/Users/macbookairzhu/Docu
 | 5. 描述统计与异常 | 8 项描述统计逐只给出、日收益箱线图、\|z\|>4/5/6 与 \|r\|≥9.5% 双口径异常识别、剔除前后的敏感性比较 |
 | 6. 相关性 | Pearson 相关矩阵 + 热力图；成对样本量 1,373—1,384 天；与共同样本口径对照；同行业与金融板块分组检验 |
 | 7. 两类组合 | 净值曲线 + 回撤曲线；等权 −9.11%（年化 −1.72%）vs 市值加权 −14.88%（年化 −2.89%）；波动率约 20.6%；权重和恒为 1；HHI 与等效分散只数 |
-| 8. 总体结论 | 主要发现串联、关键处理判断、数据与方法的局限、AI 使用声明 |
+| 8. 总体结论 | 六条主要发现、7 项关键处理判断、数据/方法/样本三层局限、AI 使用声明（工具、参与环节、关键提示词、核验过程、修正过的问题） |
 
 ---
 
