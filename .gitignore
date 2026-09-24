@@ -24,4 +24,6 @@ _site/
 # CSMAR 受限数据：绝不入库（不上传公开仓库，作业第 5 节要求）
 hw-02/data/raw/ 2005—2015 年房地产 A 股上市公司年度数据/
 hw-02-2/data/raw/
+hw-02-2/data/interim/
+hw-02-2/data/processed/
 data/csmar/
