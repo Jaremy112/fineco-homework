@@ -4,7 +4,7 @@
 - 作业页面：<https://lianxhcn.github.io/FinEco/exercises/hw-02.html>
 - 截止：2026-09-28 23:59（北京时间）
 - 所属仓库：<https://github.com/Jaremy112/fineco-homework>（本目录 `hw-02/`）
-- 进度：Notebook `hw_02-1.ipynb` 第 1 节「选股与获取数据」已完成；第 2—8 节在写作中
+- 进度：Notebook `hw_02-1.ipynb` 第 1—2 节已完成（选股与获取数据、数据检查与收益率构造）；第 3—8 节在写作中
 
 本目录保存 HW02-1 的全部输入快照、下载脚本、审计文件和分析 Notebook。所有路径均为相对路径，复现时不依赖重新调用网络接口。
 
@@ -22,6 +22,8 @@ hw-02/
 ├── scripts/
 │   ├── download_akshare_hw02_1.py   正式下载与审计脚本（本次数据由它生成）
 │   ├── locate_missing_days.py       定位各股票缺失交易日并输出证据
+│   ├── build_hw02_1_section02.py    写入 Notebook 第 2 节单元
+│   └── run_notebook.py              用 fineco 内核原地执行 Notebook 并保存输出
 │   ├── download_wind_hw02_1.py      Wind 方案脚本（仅尝试，未采用，保留存档）
 │   └── build_hw02_1_notebook.py     Notebook 骨架构建脚本
 ├── data/
@@ -33,6 +35,7 @@ hw-02/
 │       ├── stock_selection_master.csv      股票池主表（唯一维护来源）
 │       ├── stock_selection_master_README.md 主表字段字典
 │       ├── daily_stock_data_20201231_20260916.csv  统一日度分析底表
+│       └── daily_returns_20210104_20260916.csv     含日收益率与跨期标记的派生表
 │       └── share_capital_history.csv        总股本变动历史
 └── audit/                           审计证据
     ├── source_manifest_akshare.csv  原始文件清单：kind、路径、行数、SHA256
@@ -143,7 +146,7 @@ Notebook 内核：`Python (FinEco)`，解释器路径 `/Users/macbookairzhu/Docu
 | Notebook 章节 | 主要输出 |
 |---|---|
 | 1. 选股与获取数据 | 选股表（10 只，含代码/简称/行业/上市日期/选股理由）、来源清单、覆盖审计、主键检查、茅台总市值 Wind 交叉核验 |
-| 2. 数据清洗与收益率构造 | 日期缺口定位与原因归类（已完成定位）、停牌与复牌日处理规则、日收益率构造、样本流 |
+| 2. 数据清洗与收益率构造 | 主键与覆盖检查、停牌定位与证据、日收益率构造、跨期收益剔除、样本流、异常收益与涨跌幅限制核对 |
 | 3. 价格与累计表现 | 不复权收盘价分面时序图、起点为 1 的累计收益曲线 |
 | 4. 波动率 | 20 个交易日滚动年化波动率（√252，不足窗口不计算） |
 | 5. 描述统计 | 有效观测数、均值、标准差、最小值、中位数、最大值、偏度、超额峰度；异常收益检查 |
@@ -155,7 +158,7 @@ Notebook 内核：`Python (FinEco)`，解释器路径 `/Users/macbookairzhu/Docu
 
 ## 8. 已知待办与局限
 
-- 第 2—8 节尚未写入 Notebook；停牌与复牌日的具体处理规则待本人裁定，见 `DECISIONS.md`。
+- 第 3—8 节尚未写入 Notebook；第 2 节采用的停牌与复牌日处理规则见 `DECISIONS.md`，仍需本人复核。
 - 复牌日（顺丰 2021-02-10、中信 2022-01-27）的"日收益"为跨期收益，中信当日还叠加配股除权，主结果中不作为单日收益使用。
 - 后复权价格只用于收益率计算，不能解释为历史实际成交价；复权序列不消除前视偏误风险，涉及信息可得性时仍须回到公告日。
 - 历史总市值由不复权价与巨潮总股本构造，仅以贵州茅台 2020-12-31 与 Wind 做了单点交叉核验，未逐股票逐日双源验证。
