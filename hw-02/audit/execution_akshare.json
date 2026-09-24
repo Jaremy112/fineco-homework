@@ -1,0 +1,21 @@
+{
+  "executed_at": "2026-09-20T19:58:11.820244+08:00",
+  "akshare_version": "1.18.39",
+  "price_upstream": "新浪财经 via AKShare stock_zh_a_daily",
+  "share_capital_upstream": "巨潮资讯 via AKShare stock_share_change_cninfo",
+  "metadata_and_crosscheck": "Wind金融数据服务",
+  "sample_period": [
+    "2021-01-01",
+    "2026-09-16"
+  ],
+  "support_rule": "Each stock's final observed trading day before 2021-01-01",
+  "adjustment": "hfq for return calculation; unadjusted for price chart and market cap",
+  "units": {
+    "price": "CNY",
+    "volume_source": "shares",
+    "volume_output": "shares",
+    "turnover_output": "100m CNY",
+    "market_cap_output": "100m CNY",
+    "cninfo_total_shares": "10k shares"
+  }
+}

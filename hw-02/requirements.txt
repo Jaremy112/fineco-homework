@@ -1,0 +1,9 @@
+# HW02-1 复现依赖
+# 环境：Python 3.12.12（课程 FinEco 虚拟环境）
+# 安装：pip install -r requirements.txt
+
+akshare==1.18.39
+pandas==2.3.3
+numpy==2.4.2
+matplotlib==3.10.9
+ipython==9.17.1
