@@ -17,3 +17,6 @@ __pycache__/
 .quarto/
 _site/
 .cache/
+
+# Agent workspace state (local memory, not homework)
+.workbuddy/
