@@ -76,30 +76,24 @@ def build_industry_flag():
             f"判定为房地产 {int(df['is_re'].sum())} 行")
     return df[["Symbol", "year", "is_re", "std", "IndustryCode", "IndustryName"]], note
 
-ind, note = build_industry_flag()
-print("\n[行业判定]", note)
-
 flow_rows = [("面板（合并报表+年末+A股）", len(panel), panel["Stkcd"].nunique())]
 
-if ind is not None:
-    panel = panel.merge(ind, left_on=["Stkcd", "fiscal_year"], right_on=["Symbol", "year"],
-                        how="left", validate="1:1")
+if "is_re" in panel.columns:
     judged = panel["is_re"].notna()
     flow_rows.append(("其中：年度行业表可判定", int(judged.sum()),
                       panel.loc[judged, "Stkcd"].nunique()))
-    not_judged = panel.loc[~judged, ["Stkcd", "fiscal_year"]]
-    if len(not_judged):
-        flow_rows.append(("其中：行业表缺失（暂不剔除，标记）", len(not_judged),
-                          not_judged["Stkcd"].nunique()))
-        print("\n行业表未覆盖的观测（前 10）：")
-        print(not_judged.head(10).to_string(index=False))
-    panel["is_re_eff"] = panel["is_re"].fillna(True)   # 缺失年暂计入，另做敏感性
+    if (~judged).sum():
+        flow_rows.append(("其中：行业表缺失（暂计入，另做敏感性）", int((~judged).sum()),
+                          panel.loc[~judged, "Stkcd"].nunique()))
+    panel["is_re_eff"] = panel["is_re"].fillna(True)
     re_panel = panel[panel["is_re_eff"]].copy()
     flow_rows.append(("判定为房地产后的面板", len(re_panel), re_panel["Stkcd"].nunique()))
+    print(f"\n[行业判定] 面板已并入年度表 is_re；房地产 {len(re_panel)} 观测 / "
+          f"{re_panel['Stkcd'].nunique()} 家；未判定 {int((~judged).sum())} 观测")
 else:
     panel["is_re_eff"] = True
     re_panel = panel.copy()
-    print("\n[提示] 未找到年度行业表，当前输出基于候选池（未做逐年行业筛选），仅用于代码验证。")
+    print("\n[提示] 面板缺少 is_re 列，输出基于候选池（未做逐年行业筛选）")
 
 work = re_panel
 
@@ -188,6 +182,38 @@ for i in IND:
     rows.append(r)
 valid_n = pd.DataFrame(rows)
 valid_n.to_csv(FIG / "tab_valid_n.csv", index=False, encoding="utf-8-sig")
+
+# ---------- 4.5 离群值处理前后的敏感性比较 ----------
+# 处理规则：负权益（资不抵债）观测全部保留并标识；同时给出剔除后的对照
+work["flag_neg_equity"] = work["equity"] < 0
+work["flag_lev_gt1"] = work["leverage"] > 1
+clean = work[~work["flag_neg_equity"]].copy()
+
+sens_rows = []
+for i in IND:
+    for y, g in work.groupby("fiscal_year"):
+        c = clean[clean["fiscal_year"] == y]
+        sens_rows.append({
+            "指标": LBL[i].replace("\n", ""), "年度": y,
+            "全样本均值": g[i].mean(), "剔除负权益后均值": c[i].mean(),
+            "全样本中位数": g[i].median(), "剔除负权益后中位数": c[i].median(),
+            "剔除观测数": int(g["flag_neg_equity"].sum()),
+        })
+sens = pd.DataFrame(sens_rows)
+sens["均值差异"] = sens["剔除负权益后均值"] - sens["全样本均值"]
+sens.to_csv(FIG / "tab_sensitivity.csv", index=False, encoding="utf-8-sig")
+
+print("\n=== 离群值/负权益观测的逐年分布 ===")
+neg_tab = work.groupby("fiscal_year").agg(
+    负权益观测数=("flag_neg_equity", "sum"),
+    资产负债率大于1=("flag_lev_gt1", "sum"),
+    观测数=("Stkcd", "size"))
+print(neg_tab.to_string())
+print("\n=== 敏感性示例：资产负债率与 ROE（全样本 vs 剔除负权益）===")
+demo = sens[sens["指标"].isin(["资产负债率", "ROE"])].copy()
+for c in ["全样本均值", "剔除负权益后均值", "全样本中位数", "剔除负权益后中位数", "均值差异"]:
+    demo[c] = demo[c].round(4)
+print(demo.to_string(index=False))
 
 flow_df = pd.DataFrame(flow_rows, columns=["阶段", "企业—年度观测数", "公司数"])
 flow_df.to_csv(FIG / "tab_sample_flow.csv", index=False, encoding="utf-8-sig")

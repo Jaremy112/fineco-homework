@@ -226,8 +226,33 @@ panel["ownership"] = panel["ownership"].fillna("不明")
 flow.append(("6-0 产权缺失(归入不明)观测", int((panel["ownership"] == "不明").sum()),
              panel.loc[panel["ownership"] == "不明", "Stkcd"].nunique()))
 
-panel["name"] = panel["Stkcd"].map(names)
-panel = panel.sort_values(["Stkcd", "fiscal_year"]).reset_index(drop=True)
+# ---------- 阶段 5.5：并入年度表的上市状态与行业（逐年，不做覆盖） ----------
+ANN = RAW / "行业分类表" / "STK_LISTEDCOINFOANL.json"
+if ANN.exists():
+    ann = read_json(ANN)
+    ann["Symbol"] = ann["Symbol"].astype(str).str.zfill(6)
+    ann["year"] = ann["EndDate"].astype(str).str[:4].astype(int)
+    ann["IndustryCode"] = ann["IndustryCode"].astype(str).str.upper().str.strip()
+    # 分类标准跨年映射：≤2011 用 2001 版(J*=房地产业)；≥2012 用 2012 版(K70=房地产业，J* 已变为金融业)
+    ann["is_re"] = np.where(ann["year"] <= 2011,
+                            ann["IndustryCode"].str.startswith("J"),
+                            ann["IndustryCode"].str.startswith("K70"))
+    ann["std_ver"] = np.where(ann["year"] <= 2011, "证监会2001版", "证监会2012版")
+    panel = panel.merge(
+        ann[["Symbol", "year", "is_re", "std_ver", "IndustryCode", "IndustryName", "LISTINGSTATE"]]
+        .rename(columns={"Symbol": "Stkcd", "year": "fiscal_year",
+                         "LISTINGSTATE": "listing_state"}),
+        on=["Stkcd", "fiscal_year"], how="left", validate="1:1")
+    flow.append(("5-0 并入年度表(上市状态/行业/标准版本)", int(panel["is_re"].notna().sum()),
+                 panel.loc[panel["is_re"].notna(), "Stkcd"].nunique()))
+    flow.append(("5-1 年度表未覆盖(无法判定行业)", int(panel["is_re"].isna().sum()),
+                 panel.loc[panel["is_re"].isna(), "Stkcd"].nunique()))
+    # 上市状态分布（保留 ST/暂停上市，基础库不提前剔除）
+    print("\n=== 各年年末上市状态（并入面板后）===")
+    print(pd.crosstab(panel["fiscal_year"], panel["listing_state"]).to_string())
+else:
+    panel["is_re"] = np.nan
+    print("[提示] 未找到年度表，跳过上市状态与行业并入")
 flow.append(("7-0 最终企业—年度面板", len(panel), panel["Stkcd"].nunique()))
 
 # ---------- 输出 ----------
