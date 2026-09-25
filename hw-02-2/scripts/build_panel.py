@@ -60,20 +60,28 @@ def is_a_share(code: str) -> bool:
 # ---------- 阶段 0：原始读取 ----------
 flow = []  # 样本处理表
 
-BS_DIR = "资产负债表补充" if (RAW / "资产负债表补充").exists() else "资产负债表"
-IS_DIR = "利润表补充" if (RAW / "利润表补充").exists() else "利润表"
-BS04_DIR = "04年资产负债表补充" if (RAW / "04年资产负债表补充").exists() else "04年资产负债表"
+def pick(*cands):
+    """按优先级返回第一个存在的路径。"""
+    for c in cands:
+        p = RAW / c
+        if p.exists():
+            return p
+    raise FileNotFoundError(f"未找到任一候选: {cands}")
 
-bs_raw = read_json(RAW / BS_DIR / "FS_Combas.json")
-flow.append((f"0-0 资产负债表原始行 [{BS_DIR}]", len(bs_raw), bs_raw["Stkcd"].nunique()))
+BS_DIR   = pick("资产负债表补充", "资产负债表")          # 2005—2015
+IS_DIR   = pick("利润表补充", "利润表")                   # 2005—2015
+BS04_P   = pick("资产负债表补充/04", "04年资产负债表补充", "04年资产负债表")  # 2004 年末
+EN_P     = pick("股权性质/补充/EN_EquityNatureAll.json",
+                "股权性质补充/EN_EquityNatureAll.json",
+                "股权性质/EN_EquityNatureAll.json")
 
-bs04_raw = read_json(RAW / BS04_DIR / "FS_Combas.json")
-flow.append((f"0-1 资产负债表原始行(2004) [{BS04_DIR}]", len(bs04_raw), bs04_raw["Stkcd"].nunique()))
-
-inc_raw = read_json(RAW / IS_DIR / "FS_Comins.json")
-flow.append((f"0-2 利润表原始行 [{IS_DIR}]", len(inc_raw), inc_raw["Stkcd"].nunique()))
-
-en_raw = read_json(RAW / "股权性质/EN_EquityNatureAll.json")
+bs_raw   = read_json(BS_DIR / "FS_Combas.json")
+bs04_raw = read_json(BS04_P / "FS_Combas.json")
+inc_raw  = read_json(IS_DIR / "FS_Comins.json")
+en_raw   = read_json(EN_P)
+flow.append((f"0-0 资产负债表原始行 [{BS_DIR.name}]", len(bs_raw), bs_raw["Stkcd"].nunique()))
+flow.append((f"0-1 资产负债表原始行(2004) [{BS04_P.name}]", len(bs04_raw), bs04_raw["Stkcd"].nunique()))
+flow.append((f"0-2 利润表原始行 [{IS_DIR.name}]", len(inc_raw), inc_raw["Stkcd"].nunique()))
 flow.append(("0-3 股权性质原始行（2004—2015）", len(en_raw), en_raw["Symbol"].nunique()))
 
 # ---------- 阶段 1：合并报表 + 年末 + A 股 ----------
