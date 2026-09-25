@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.sans-serif"] = ["PingFang SC", "Hiragino Sans GB", "Arial Unicode MS", "Heiti TC"]
 plt.rcParams["axes.unicode_minus"] = False
 
-BASE = Path("/Users/macbookairzhu/Documents/fineco-homework/hw-02-2")
+BASE = Path("/Users/macbookairzhu/Documents/fineco-homework/hw02-2")
 RAW = Path("/Users/macbookairzhu/Documents/fineco-homework/hw02-2/data/raw/"
            " 2005—2015 年房地产 A 股上市公司年度数据")
 PROC = BASE / "data" / "processed"

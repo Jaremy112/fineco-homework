@@ -26,7 +26,7 @@ import pandas as pd
 
 RAW = Path("/Users/macbookairzhu/Documents/fineco-homework/hw02-2/data/raw/"
            " 2005—2015 年房地产 A 股上市公司年度数据")
-OUT = Path("/Users/macbookairzhu/Documents/fineco-homework/hw-02-2/data/processed")
+OUT = Path("/Users/macbookairzhu/Documents/fineco-homework/hw02-2/data/processed")
 OUT.mkdir(parents=True, exist_ok=True)
 
 # 关键科目编码（来自各表 DES 字段说明，已逐条比对）
