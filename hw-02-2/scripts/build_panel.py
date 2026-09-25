@@ -60,14 +60,18 @@ def is_a_share(code: str) -> bool:
 # ---------- 阶段 0：原始读取 ----------
 flow = []  # 样本处理表
 
-bs_raw = read_json(RAW / "资产负债表/FS_Combas.json")
-flow.append(("0-0 资产负债表原始行（2005—2015）", len(bs_raw), bs_raw["Stkcd"].nunique()))
+BS_DIR = "资产负债表补充" if (RAW / "资产负债表补充").exists() else "资产负债表"
+IS_DIR = "利润表补充" if (RAW / "利润表补充").exists() else "利润表"
+BS04_DIR = "04年资产负债表补充" if (RAW / "04年资产负债表补充").exists() else "04年资产负债表"
 
-bs04_raw = read_json(RAW / "04年资产负债表/FS_Combas.json")
-flow.append(("0-1 资产负债表原始行（2004）", len(bs04_raw), bs04_raw["Stkcd"].nunique()))
+bs_raw = read_json(RAW / BS_DIR / "FS_Combas.json")
+flow.append((f"0-0 资产负债表原始行 [{BS_DIR}]", len(bs_raw), bs_raw["Stkcd"].nunique()))
 
-inc_raw = read_json(RAW / "利润表/FS_Comins.json")
-flow.append(("0-2 利润表原始行（2005—2015）", len(inc_raw), inc_raw["Stkcd"].nunique()))
+bs04_raw = read_json(RAW / BS04_DIR / "FS_Combas.json")
+flow.append((f"0-1 资产负债表原始行(2004) [{BS04_DIR}]", len(bs04_raw), bs04_raw["Stkcd"].nunique()))
+
+inc_raw = read_json(RAW / IS_DIR / "FS_Comins.json")
+flow.append((f"0-2 利润表原始行 [{IS_DIR}]", len(inc_raw), inc_raw["Stkcd"].nunique()))
 
 en_raw = read_json(RAW / "股权性质/EN_EquityNatureAll.json")
 flow.append(("0-3 股权性质原始行（2004—2015）", len(en_raw), en_raw["Symbol"].nunique()))
