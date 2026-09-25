@@ -1,0 +1,10 @@
+# HW02-2 复现依赖
+# 环境：Python 3.12.12（课程 FinEco 虚拟环境）
+# 安装：pip install -r requirements.txt
+
+pandas==2.3.3
+numpy==2.4.2
+matplotlib==3.10.9
+
+# 说明：数据来自 CSMAR 手动导出（受限，不随仓库分发），
+# 复现无需 akshare 等联网接口；见 data/README.md 与 DATA_MANIFEST.md。

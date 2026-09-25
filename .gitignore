@@ -26,3 +26,6 @@ hw02-2/data/raw/
 hw02-2/data/interim/
 hw02-2/data/processed/
 data/csmar/
+
+# 个人学习笔记，不入库
+notes/
