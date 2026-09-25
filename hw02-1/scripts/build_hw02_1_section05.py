@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 5 节「描述统计与异常收益检查」。
+"""在 hw02-1.ipynb 中追加第 5 节「描述统计与异常收益检查」。
 
 对应作业必做要求表第 5 行：有效观测数、均值、标准差、最小值、中位数、最大值、偏度、超额峰度；
 以及"检查离群值是必做、缩尾不是必做"和"影响结论的处理须比较处理前后"两条要求。
@@ -13,7 +13,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 CUT_MARKERS = ("## 5. 描述统计与异常收益检查", "## 后续分析结构")

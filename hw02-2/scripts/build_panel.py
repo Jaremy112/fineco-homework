@@ -24,7 +24,7 @@ import json
 import numpy as np
 import pandas as pd
 
-RAW = Path("/Users/macbookairzhu/Documents/fineco-homework/hw-02/data/raw/"
+RAW = Path("/Users/macbookairzhu/Documents/fineco-homework/hw02-2/data/raw/"
            " 2005—2015 年房地产 A 股上市公司年度数据")
 OUT = Path("/Users/macbookairzhu/Documents/fineco-homework/hw-02-2/data/processed")
 OUT.mkdir(parents=True, exist_ok=True)

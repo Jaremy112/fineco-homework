@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 8 节「总体结论、局限与AI使用说明」。
+"""在 hw02-1.ipynb 中追加第 8 节「总体结论、局限与AI使用说明」。
 
 对应作业要求：每题末尾须有总体结论，串联主要发现、回答本题问题、概括关键处理判断及
 数据与方法的局限；AI 使用声明须记录工具、参与环节、至少一条关键提示词和本人核验过程。
@@ -13,7 +13,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 CUT_MARKERS = ("## 8. 总体结论", "## 后续分析结构")

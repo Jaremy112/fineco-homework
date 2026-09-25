@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 7 节「等权组合与滞后总市值加权组合」。
+"""在 hw02-1.ipynb 中追加第 7 节「等权组合与滞后总市值加权组合」。
 
 对应作业要求：等权 r_t = Σ 0.1 r_i,t；市值加权 w_{i,t-1} = MV_{i,t-1} / Σ MV_{j,t-1}；
 比较累计收益与净值曲线、几何年化收益率、年化波动率、最大回撤；核验每日权重和为 1。
@@ -13,7 +13,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 CUT_MARKERS = ("## 7. 等权组合与滞后总市值加权组合", "## 后续分析结构")

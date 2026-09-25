@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 4 节「20 日滚动年化波动率」。
+"""在 hw02-1.ipynb 中追加第 4 节「20 日滚动年化波动率」。
 
 对应作业必做要求表第 4 行：20 个交易日滚动年化波动率；年化用日收益样本标准差乘 √252，
 窗口不足 20 个观测时不计算。
@@ -13,7 +13,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 CUT_MARKERS = ("## 4. 20日滚动年化波动率", "## 后续分析结构")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 2 节「数据检查与收益率构造」。
+"""在 hw02-1.ipynb 中追加第 2 节「数据检查与收益率构造」。
 
 用法：
     cd hw-02 && python scripts/build_hw02_1_section02.py
@@ -10,7 +10,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import nbformat as nbf
 
 root = Path(__file__).resolve().parents[1]
-out = root / "hw_02-1.ipynb"
+out = root / "hw02-1.ipynb"
 nb = nbf.v4.new_notebook()
 nb["metadata"]["kernelspec"] = {"display_name": "Python (FinEco)", "language": "python", "name": "fineco"}
 nb["metadata"]["language_info"] = {"name": "python", "version": "3.12.12"}

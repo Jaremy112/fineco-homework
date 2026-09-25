@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 3 节「不复权价格、累计收益和日收益图形」。
+"""在 hw02-1.ipynb 中追加第 3 节「不复权价格、累计收益和日收益图形」。
 
 对应作业必做要求表中的三行：收盘价时序、起点为 1 的累计表现、日收益率时序及异常波动检查。
 
@@ -12,7 +12,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 # 幂等：若已存在第 3 节或原占位单元，从其起始位置截断后重新写入

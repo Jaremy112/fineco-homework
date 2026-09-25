@@ -10,7 +10,7 @@ import nbformat as nbf
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 client = NotebookClient(nb, timeout=600, kernel_name="fineco", resources={"metadata": {"path": str(ROOT)}})

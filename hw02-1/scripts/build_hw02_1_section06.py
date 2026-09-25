@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 hw_02-1.ipynb 中追加第 6 节「日收益率 Pearson 相关性」。
+"""在 hw02-1.ipynb 中追加第 6 节「日收益率 Pearson 相关性」。
 
 对应作业必做要求表第 6 行：日收益率 Pearson 相关系数矩阵或热力图（二选一，本节两者都给），
 并注明日期对齐方式、缺失处理和实际样本量；解释同行业股票是否更相关。
@@ -13,7 +13,7 @@ from pathlib import Path
 import nbformat as nbf
 
 ROOT = Path(__file__).resolve().parents[1]
-NB = ROOT / "hw_02-1.ipynb"
+NB = ROOT / "hw02-1.ipynb"
 
 nb = nbf.read(NB, as_version=4)
 CUT_MARKERS = ("## 6. 日收益率Pearson相关性", "## 后续分析结构")
