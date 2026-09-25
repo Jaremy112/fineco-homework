@@ -65,10 +65,12 @@ def build_industry_flag():
     df = pd.DataFrame(recs)
     df["Symbol"] = df["Symbol"].astype(str).str.zfill(6)
     df["year"] = df["EndDate"].astype(str).str[:4].astype(int)
+    # 分类标准跨年映射：2011 及以前用 2001 版（J* = 房地产业）；
+    # 2012 起用 2012 版（K70 = 房地产业；2012 版的 J* 是金融业，不可误判）
+    y = df["year"]
     code = df["IndustryCode"].astype(str).str.upper().str.strip()
-    df["is_re"] = code.str.startswith("J") | code.str.startswith("K70")
-    df["std"] = np.where(code.str.startswith("J"), "证监会2001版",
-                         np.where(code.str.startswith("K"), "证监会2012版", "其他"))
+    df["is_re"] = np.where(y <= 2011, code.str.startswith("J"), code.str.startswith("K70"))
+    df["std"] = np.where(y <= 2011, "证监会2001版", "证监会2012版")
     note = (f"年度表 {cand[0].name}：{len(df)} 行，{df['Symbol'].nunique()} 家，"
             f"年份 {df['year'].min()}—{df['year'].max()}；"
             f"判定为房地产 {int(df['is_re'].sum())} 行")
