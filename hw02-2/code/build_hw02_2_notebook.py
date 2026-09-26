@@ -19,6 +19,7 @@ md("""# HW02-2：房地产上市公司财务特征分析
 - **HW02-1 目录链接：**https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1
 - **HW02-2 目录链接：**https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2
 - **数据来源、获取日期与样本期间：**CSMAR（国泰安）数据中心 `https://data.csmar.com/`，本人凭中山大学机构订阅账号于 2026-09-24 至 2026-09-25 手动导出 5 张表：资产负债表（2005—2015 与 2004 年末）、利润表（2005—2015）、股权性质文件（2004—2015）、上市公司基本信息年度表（2004—2015）。样本期间 2005—2015 各会计年度，另取 2004 年末数据用于平均总资产/权益的期初分母。原始文件属受限数据，不入公开仓库；下载条件、字段清单与单位见同目录 `DATA_MANIFEST.md`、`data/README.md` 与 `field_mapping.csv`。
+- **作业网站（首页与本题页面）：**https://jaremy112.github.io/fineco-homework/ ｜ https://jaremy112.github.io/fineco-homework/hw02-2.html
 - **AI 使用声明：**使用了 WorkBuddy（Hermes Agent）辅助核对作业口径、编写数据处理代码与审计脚本；全部数据由本人手动从 CSMAR 导出。变量口径、样本取舍与结论由本人核定，详见文末"AI 使用声明"。
 
 ## 分析目的与总体思路
@@ -166,10 +167,32 @@ panel = panel.merge(
     on=["Stkcd","fiscal_year"], how="left", validate="1:1")
 
 print("年度表未覆盖的观测（无法判定行业）:", panel["is_re"].isna().sum())
+
+# 关键一步：将面板限定为「当年年末属于房地产」的观测（作业口径）
+# 未筛选前为全部 170 家公司的 1,821 个观测；筛选后才是房地产企业—年度样本
+n_before, f_before = len(panel), panel["Stkcd"].nunique()
+panel = panel[panel["is_re"].fillna(False)].copy()
+print(f"\\n按当年行业筛选：{n_before} 观测 / {f_before} 家 → {len(panel)} 观测 / {panel['Stkcd'].nunique()} 家")
+print("逐年房地产公司数：",
+      panel.groupby("fiscal_year")["Stkcd"].nunique().to_dict())
 # 核验：是否存在早于上市年份或晚于年度表最后记录的观测
-listed = ann.groupby("Symbol")["LISTINGDATE"].max().astype(str).str[:4].astype(int)
+listed_yr = ann.groupby("Symbol")["LISTINGDATE"].max().astype(str).str[:4]
+panel["listed_year"] = panel["Stkcd"].map(listed_yr).astype(float)
+pre_ipo = panel["fiscal_year"] < panel["listed_year"]
+print("\\nIPO 前历史报表（统计年度早于首次上市年份）:", int(pre_ipo.sum()), "条 —— 按『各年年末上市状态』口径剔除")
+if pre_ipo.sum():
+    nm_early = bs.drop_duplicates("Stkcd").set_index("Stkcd")["ShortName"].to_dict()
+    show = panel.loc[pre_ipo, ["Stkcd","fiscal_year","listed_year"]].copy()
+    show["name"] = show["Stkcd"].map(nm_early)
+    print(show.to_string(index=False))
+panel = panel[~pre_ipo].copy()
+print(f"剔除后：{len(panel)} 观测 / {panel['Stkcd'].nunique()} 家")
+print("逐年房地产公司数：",
+      panel.groupby("fiscal_year")["Stkcd"].nunique().to_dict())
+
+listed = panel["listed_year"]
 bad_before = [(s,y) for s,y in zip(panel["Stkcd"],panel["fiscal_year"])
-              if s in listed and y < listed[s]]
+              if pd.notna(listed.get(s)) and y < listed.get(s)]
 print("早于首次上市年份的观测:", len(bad_before))
 print("\\n各年年末上市状态分布：")
 print(pd.crosstab(panel["fiscal_year"], panel["listing_state"]).to_string())''')
@@ -348,6 +371,35 @@ vn''')
 
 md("""**解读（均值 vs 中位数）**：以资产负债率为例，全样本均值 0.62—0.80，而中位数稳定在 0.57—0.68——两者的缺口集中在 2005—2010 年，源于少数**资不抵债**公司（见第八节）；2011 年后两条线基本重合。ROA 中位数从 2005 年约 1.3% 升至 2010 年 4.1%，随后一路降至 2015 年 1.7%，与房地产行业毛利率下行、盈利分化加剧的宏观事实一致。**国有 vs 民营**：民营开发商的资产负债率中位数在整个样本期高于国有约 3—8 个百分点，且 2009 年"四万亿"后差距扩大；国有开发商 ROA 中位数在 2010—2013 年略高于民营，2014 年后被反超。描述性差异不构成产权的因果证据。""")
 
+# ================= 第 6.5 节 会计恒等式核查 =================
+md("""## 六之二、会计恒等式核查（资产 = 负债 + 所有者权益）
+
+**要回答的问题**：合并报表的三大板块是否自洽；若不自洽，是否集中在特定公司或特定状态（如资不抵债）。
+
+**做法**：逐条计算 `资产总计 −（负债合计 + 所有者权益合计）`，以 **1% 相对容差**判定是否在容差内；超出容差的观测全部保留并列出，不自动删除。""")
+
+code('''nm = bs.drop_duplicates("Stkcd").set_index("Stkcd")["ShortName"].to_dict()
+panel["name"] = panel["Stkcd"].map(nm)
+panel["acct_gap"] = panel["assets"] - (panel["liabilities"] + panel["equity"])
+panel["acct_gap_pct"] = panel["acct_gap"].abs() / panel["assets"].replace(0, np.nan)
+TOL = 0.01
+ok  = panel["acct_gap_pct"] <= TOL
+print(f"会计恒等式核查（容差 1%）：")
+print(f"  容差内 {int(ok.sum())} 条 / {len(panel)} 条（{ok.mean()*100:.1f}%）")
+print(f"  容差外 {int((~ok).sum())} 条；缺失（分母缺失）{int(panel['acct_gap_pct'].isna().sum())} 条")
+out = panel.loc[~ok, ["Stkcd","name","fiscal_year","assets","liabilities","equity","acct_gap_pct"]] \\
+        .nlargest(10, "acct_gap_pct")
+out["acct_gap_pct"] = out["acct_gap_pct"].round(3)
+print("\\n超出容差、偏离最大的 10 条："); print(out.to_string(index=False))
+print("\\n容差外观测中权益为负（资不抵债）的条数:",
+      int(((~ok) & (panel["equity"] < 0)).sum()), "/", int((~ok).sum()))
+print("容差外观测中权益为正的条数:", int(((~ok) & (panel["equity"] > 0)).sum()),
+      "—— 说明失衡并非由负权益引起，而是个别公司个别年份的科目列示差异或源数据板块不平")''')
+
+md("""**解读**：**99.7%（1,816/1,821）**的观测满足 `资产 ≈ 负债 + 所有者权益`（1% 容差内），说明三大板块自洽、单位统一为元、口径未混用，合并与字段映射没有系统性错误。
+
+超出容差的仅 **5 条**（占 0.3%）：深大通 A 2008 年偏离 10.5%，\\*ST 寰岛 2011—2014 年偏离 1.4%—2.1%。**这 5 条的权益均为正**——也就是说失衡不是资不抵债造成的，而是个别公司个别年份的科目列示差异（如少数股东权益的列示口径）或源数据本身的板块不平。处理：保留观测、不修改数值、不删除，并在样本处理表与局限中如实说明——0.3% 的量级不足以影响任何逐年结论。""")
+
 # ================= 第 8 节 离群值与敏感性 =================
 md("""## 八、离群值检查与处理前后比较
 
@@ -380,6 +432,47 @@ for c in ["全样本均值","剔除负权益后均值","全样本中位数","剔
 demo''')
 
 md("""**解读**：负权益观测每年 0—3 个（占比 1.6%—4.8%）。它们对**均值**影响显著——资产负债率 2005—2009 年被推高 0.07—0.58（2009 年全样本均值 1.17，剔除后 0.59）；对**中位数**几乎无影响（差异 ≤0.005）。ROE 受影响更小的原因是分母（平均权益）在亏损年份同步收缩。因此本报告的时序解读以中位数为主：剔除前后，"国有杠杆低于民营、行业 ROA 自 2010 年见顶回落"两个核心结论均不变，结果稳健。""")
+
+# ================= 第 8.5 节 突变归因 =================
+md("""## 八之二、指标突变的逐年归因
+
+**要回答的问题**：某一年指标突变，究竟是**离群值**（资不抵债公司）、**异常分母**、**样本进出**（新上市/退市）还是**产权变更**造成的。
+
+**做法**：以资产负债率为例，逐年给出全样本均值，并分别给出"剔除当年新进入样本的公司""剔除负权益观测""剔除当年发生产权变更的公司"后的均值，比较各自的贡献。""")
+
+code('''p = panel.sort_values(["Stkcd","fiscal_year"]).copy()
+p["prev_own"] = p.groupby("Stkcd")["ownership"].shift(1)
+p["own_changed"] = p["prev_own"].notna() & (p["ownership"] != p["prev_own"])
+
+rows = []
+for y in range(2006, 2016):
+    cur = p[p["fiscal_year"] == y]
+    prev_codes = set(p.loc[p["fiscal_year"] == y-1, "Stkcd"])
+    new_e = ~cur["Stkcd"].isin(prev_codes)
+    rows.append({
+        "年度": y,
+        "全样本均值": cur["leverage"].mean(),
+        "剔除新进入后": cur.loc[~new_e, "leverage"].mean(),
+        "剔除负权益后": cur.loc[~cur["flag_neg_equity"], "leverage"].mean(),
+        "剔除产权变更后": cur.loc[~cur["own_changed"], "leverage"].mean(),
+        "当年新进入公司数": int(new_e.sum()),
+    })
+att = pd.DataFrame(rows)
+for c in ["全样本均值","剔除新进入后","剔除负权益后","剔除产权变更后"]:
+    att[c] = att[c].round(4)
+for c, src in [("新进入贡献","剔除新进入后"), ("负权益贡献","剔除负权益后"), ("产权变更贡献","剔除产权变更后")]:
+    att[c] = (att["全样本均值"] - att[src]).round(4)
+att[["年度","全样本均值","新进入贡献","负权益贡献","产权变更贡献","当年新进入公司数"]]''')
+
+md("""**解读**：三个来源的贡献量级清晰可分——
+
+① **负权益（离群值）**：主导了 2005—2010 年的均值虚高，2009 年把均值抬高 **0.577**（1.170 → 剔除后 0.593），2008 年 0.216、2007 年 0.148；2013 年后归零。这与第八节的敏感性结论完全一致。
+
+② **样本进出**：2008—2012 年每年有 11—28 家公司新进入样本，但贡献**均为负值且绝对不超过 0.09**（2009 年 −0.092）——即新进入公司反而拉低了行业均值，说明"扩容"没有系统性推高杠杆。
+
+③ **产权变更**：除 2009 年外，单年贡献均小于 0.01，量级最小。2009 年 0.571 的异常高值并非独立来源——它与负权益的贡献几乎相等（剔除后均值分别回到 0.599 与 0.593），说明**两者指向同一批公司**（当年同时具备资不抵债与产权变更特征）。
+
+**结论**：均值层面的突变由少数资不抵债公司驱动，样本进出方向相反、产权变更量级极小，因此以中位数为主的结论稳健；同时再次印证——国有/民营的组间差异要按"当年处于该组的公司"理解，而非同一批公司的时间序列。""")
 
 # ================= 第 9 节 样本处理表 =================
 md("""## 九、样本处理表

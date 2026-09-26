@@ -6,7 +6,7 @@
 - site_url: 未建立 GitHub Pages 网站（作业第 6 节为可选项，未建站不扣分）
 - assignment_url: https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1
   - 另一题：https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2
-- commit_sha: f696dc2ed546d0440189170244e3f61c1a545a64
+- commit_sha: 1fa5c69125cd880a63c7749c38f05a38e3d095c5
 
 ## 本次提交包含
 

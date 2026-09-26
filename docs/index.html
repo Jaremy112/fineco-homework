@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinEco 金融计量经济学 · HW02 作业</title>
+<style>
+  body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+       max-width:860px;margin:40px auto;padding:0 20px;color:#1a1a1a;line-height:1.7;background:#fafafa}
+  h1{font-size:1.7em;border-bottom:3px solid #1f4e79;padding-bottom:.3em;color:#1f4e79}
+  h2{font-size:1.15em;color:#1f4e79;margin-top:1.8em}
+  .card{background:#fff;border:1px solid #e3e3e3;border-radius:10px;padding:20px 24px;margin:18px 0;
+        box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin-top:0}
+  .tag{display:inline-block;background:#eef3f8;color:#1f4e79;border-radius:4px;
+       padding:1px 8px;font-size:.85em;margin-right:6px}
+  a{color:#1f66a5;text-decoration:none} a:hover{text-decoration:underline}
+  table{border-collapse:collapse;width:100%;font-size:.95em}
+  th,td{border:1px solid #ddd;padding:6px 10px;text-align:left}
+  th{background:#eef3f8}
+  footer{color:#888;font-size:.85em;margin-top:40px;border-top:1px solid #ddd;padding-top:12px}
+</style>
+</head>
+<body>
+
+<h1>HW02：金融数据分析</h1>
+<p>
+<b>朱家瑞</b>（学号 23347105） · 金融计量经济学（FinEco，中山大学岭南学院）<br>
+作业页面：<a href="https://lianxhcn.github.io/FinEco/exercises/hw-02.html">FinEco · 第二次作业</a> ·
+代码仓库：<a href="https://github.com/Jaremy112/fineco-homework">Jaremy112/fineco-homework</a>
+</p>
+
+<div class="card">
+<h2><span class="tag">题一</span><a href="hw02-1.html">HW02-1：股票收益与组合风险分析</a></h2>
+<p>10 只覆盖 9 个行业的 A 股（2021-01-01 至 2026-09-16）：日收益与 20 日滚动年化波动率、描述统计、
+Pearson 相关性（同行业对反而最不相关）、等权 vs 滞后市值加权组合（−9.11% vs −14.88%）。
+<b>55 单元 · 8 图 · 15 表</b>，全部已运行并保存结果。</p>
+</div>
+
+<div class="card">
+<h2><span class="tag">题二</span><a href="hw02-2.html">HW02-2：房地产上市公司财务特征分析</a></h2>
+<p>CSMAR 2005—2015 年房地产 A 股年度合并报表，企业—年度非平衡面板（170 家 / 1,175 观测）：
+逐年行业判定（2001 版 J / 2012 版 K70 跨标准映射）、产权四类分组（国有占比 58.1% → 46.3%）、
+六项财务指标的四类输出、离群值（负权益）敏感性与突变归因、会计恒等式核查。
+<b>35 单元 · 4 图 · 多表</b>，全部已运行并保存结果。</p>
+</div>
+
+<h2>数据与复现说明</h2>
+<table>
+<tr><th>题</th><th>数据来源</th><th>获取日期</th><th>复现入口</th></tr>
+<tr><td>HW02-1</td><td>AKShare（新浪行情、巨潮股本）；CSMAR 基本信息年度表（教师包）；Wind 交叉核验</td><td>2026-09-24</td>
+    <td><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1">hw02-1/</a>（含数据快照）</td></tr>
+<tr><td>HW02-2</td><td>CSMAR（本人手动导出 5 张表，2004—2015）</td><td>2026-09-24 至 09-25</td>
+    <td><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2">hw02-2/</a>（受限数据不入库，提供下载条件与字段清单）</td></tr>
+</table>
+<p style="font-size:.9em;color:#666">本网站只展示 Notebook 已保存的运行结果，不在访问时实时取数或执行分析；
+CSMAR 受限原始数据不上传公开仓库。网页由 Notebook 经 nbconvert 渲染生成。</p>
+
+<footer>生成于 2026-09-26 · 提交哈希见 hw-02-submission.md</footer>
+</body>
+</html>
