@@ -13,7 +13,7 @@ code = lambda s: cells.append(nbfv.new_code_cell(s))
 md("""# HW02-2：房地产上市公司财务特征分析
 
 - **姓名：**朱家瑞
-- **学号：**23347105
+- **学号：**见坚果云提交版（公开仓库版不展示完整学号）
 - **作业简介或教师作业页面链接：**https://lianxhcn.github.io/FinEco/exercises/hw-02.html
 - **个人 GitHub 仓库访问地址：**https://github.com/Jaremy112/fineco-homework
 - **HW02-1 目录链接：**https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1
