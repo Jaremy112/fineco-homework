@@ -47,7 +47,17 @@ plt.rcParams["font.sans-serif"] = ["PingFang SC", "Hiragino Sans GB", "Arial Uni
 plt.rcParams["axes.unicode_minus"] = False
 pd.set_option("display.width", 200)
 
-RAW = Path("data/raw/ 2005—2015 年房地产 A 股上市公司年度数据")
+# 数据目录定位：首选相对路径（本目录 data/raw）；从仓库根等目录打开时自动回退
+_SUB = " 2005—2015 年房地产 A 股上市公司年度数据"
+for _cand in [Path("data/raw") / _SUB,
+              Path("hw02-2/data/raw") / _SUB,
+              Path("../hw02-2/data/raw") / _SUB]:
+    if (_cand / "资产负债表补充/FS_Combas.json").exists():
+        RAW = _cand
+        break
+else:
+    raise FileNotFoundError("未找到 CSMAR 原始数据目录；请将工作目录切到 hw02-2/ 后 Restart & Run All")
+print("数据目录:", RAW)
 
 def read_json(p):
     """逐行读取 CSMAR 导出的 NDJSON。"""
