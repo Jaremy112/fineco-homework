@@ -4,7 +4,7 @@
 - 作业页面：<https://lianxhcn.github.io/FinEco/exercises/hw-02.html>
 - 截止：2026-09-28 23:59（北京时间）
 - 所属仓库：<https://github.com/Jaremy112/fineco-homework>（本目录 `hw02-1/`）
-- 进度：Notebook `hw02-1.ipynb` **全部 8 节已完成**（55 单元，8 张图 + 15 张表，已运行并保存输出）
+- 进度：Notebook `hw02-1.ipynb` **全部 8 节已完成**（57 单元，9 张图 + 31 张表，已运行并保存输出）
 
 本目录保存 HW02-1 的全部输入快照、下载脚本、审计文件和分析 Notebook。所有路径均为相对路径，复现时不依赖重新调用网络接口。
 
@@ -13,13 +13,13 @@
 ## 1. 目录结构
 
 ```
-hw-02/
+hw02-1/
 ├── README.md                        本文件：来源、口径、运行顺序、预期输出
 ├── CHANGELOG.md                     操作日志：每步做了什么、依据、产出、样本流
 ├── DECISIONS.md                     口径决定记录与待裁定事项
 ├── requirements.txt                 复现依赖（含版本）
 ├── hw02-1.ipynb                    主分析 Notebook（已运行，含输出）
-├── scripts/
+├── code/
 │   ├── download_akshare_hw02_1.py   正式下载与审计脚本（本次数据由它生成）
 │   ├── locate_missing_days.py       定位各股票缺失交易日并输出证据
 │   ├── build_hw02_1_section02.py    写入 Notebook 第 2 节单元
@@ -112,19 +112,19 @@ hw-02/
 ### 路径 A：用数据快照复现（推荐，也是批改所用路径）
 
 ```bash
-cd hw-02
+cd hw02-1
 pip install -r requirements.txt
 jupyter notebook hw02-1.ipynb     # 内核选择 Python (FinEco)，Restart & Run All
 ```
 
-Notebook 第 00 个代码单元会自动定位项目目录：若当前目录下找不到 `audit/source_manifest_akshare.csv`，会回退检查 `./hw-02`。因此从仓库根目录或 `hw02-1/` 目录启动均可。
+Notebook 第 00 个代码单元会自动定位项目目录：若当前目录下找不到 `audit/source_manifest_akshare.csv`，会回退检查 `./hw02-1`。因此从仓库根目录或 `hw02-1/` 目录启动均可。
 
 ### 路径 B：重新下载（会覆盖 raw 与 processed，仅在需要更新数据时使用）
 
 ```bash
-cd hw-02
-python scripts/download_akshare_hw02_1.py    # 需要 akshare 与网络；会重算 manifest/coverage/crosscheck
-python scripts/build_hw02_1_notebook.py      # 可选：重建 Notebook 骨架
+cd hw02-1
+python code/download_akshare_hw02_1.py    # 需要 akshare 与网络；会重算 manifest/coverage/crosscheck
+python code/build_hw02_1_notebook.py      # 可选：重建 Notebook 骨架
 ```
 
 注意：路径 B 会重新调用外部接口，结果可能随上游更新而变化；提交与批改以路径 A 的本地快照为准。

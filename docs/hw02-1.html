@@ -7525,6 +7525,7 @@ a.anchor-link {
 <li><strong>HW02-1 目录链接：</strong><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1</a></li>
 <li><strong>HW02-2 目录链接：</strong><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2</a></li>
 <li><strong>数据来源、获取日期与样本期间：</strong>AKShare 1.18.39（新浪财经日行情、巨潮资讯股本变动）为主要数据源，CSMAR上市公司基本信息年度表用于统一简称、上市日期及2025年末行业分类，Wind金融数据服务用于关键字段交叉核验；获取日期为2026-09-24（AKShare 下载与审计，见同目录 CHANGELOG.md）；正式样本为2021-01-01至2026-09-16，并补充每只股票在2021年前最后一个有效交易日用于计算首个日收益率。</li>
+<li><strong>作业网站（首页与本题页面）：</strong><a href="https://jaremy112.github.io/fineco-homework/">https://jaremy112.github.io/fineco-homework/</a> ｜ <a href="https://jaremy112.github.io/fineco-homework/hw02-1.html">https://jaremy112.github.io/fineco-homework/hw02-1.html</a></li>
 <li><strong>AI 使用声明：</strong>使用了Hermes Agent（Codex）辅助读取教师作业要求、设计数据获取与审计流程、编写和检查Python代码；使用Wind MCP调用万得金融数据服务。股票池、字段口径、异常处理和结论由本人核对，Notebook保留数据来源、参数、实际输出和局限说明。</li>
 </ul>
 <h2 id="%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">分析目的与总体思路<a class="anchor-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">¶</a></h2><p>本文选择10只至少覆盖5个CSMAR行业、且均在样本开始前上市的A股，先取得不复权收盘价、经公司行为调整的复权收盘价、成交量、成交额和历史总市值，再检查主键、日期、覆盖、缺失、停牌和异常收益。在统一的数据口径上，依次完成价格与累计收益图、日收益及滚动波动率、描述统计、相关性分析，并比较每日等权与使用上一交易日总市值确定权重的市值加权组合。分析遵循“说明—代码与实际输出—结果解读”的结构。</p>
@@ -7700,7 +7701,7 @@ a.anchor-link {
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>Python: 3.12.12
 pandas: 2.3.3
-项目目录: /Users/macbookairzhu/Documents/fineco-homework/hw-02
+项目目录: /Users/macbookairzhu/Documents/fineco-homework/hw02-1
 </pre>
 </div>
 </div>
@@ -7936,7 +7937,7 @@ pandas: 2.3.3
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>股票池主表: /Users/macbookairzhu/Documents/fineco-homework/hw-02/data/processed/stock_selection_master.csv
+<pre>股票池主表: /Users/macbookairzhu/Documents/fineco-homework/hw02-1/data/processed/stock_selection_master.csv
 股票数: 10
 CSMAR行业数量: 9
 全部在样本前上市: True
@@ -11695,7 +11696,13 @@ stock_code
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>成对有效样本量: 最小 1373  最大 1384  中位数 1384
-共同样本行数: 1373
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>共同样本行数: 1373
 平均相关系数: pairwise 0.3186  共同样本 0.3183
 两种口径下单个相关系数差异的最大绝对值: 0.0079
 </pre>
@@ -11853,7 +11860,7 @@ stock_code
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=31b648b7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9a1dc0e6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11879,7 +11886,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=82ad144b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dca8873c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11889,7 +11896,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=982d4a65">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c61313e5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11948,7 +11955,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1fdc2ade">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9addc319">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -12079,12 +12086,125 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=26eb39f8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5c13e5ea">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 等权口径敏感性：固定 0.1（停牌日贡献为 0） vs 停牌日重新归一化（主口径）</span>
+<span class="c1"># 作业展示的等权公式为 Σ 0.1·r_i；主口径在停牌/复牌日把该股排除后重新归一化，</span>
+<span class="c1"># 固定 0.1 口径则始终给 10 只股票各 0.1，停牌日该股当日贡献按 0 计（持仓价值不变）。</span>
+<span class="n">r_ew_fixed</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">R</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nav_ew_fixed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r_ew_fixed</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+<span class="n">dd_ew</span> <span class="o">=</span> <span class="n">nav_ew</span> <span class="o">/</span> <span class="n">nav_ew</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">dd_fixed</span> <span class="o">=</span> <span class="n">nav_ew_fixed</span> <span class="o">/</span> <span class="n">nav_ew_fixed</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">sens</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">"口径"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"停牌日重新归一化（主口径）"</span><span class="p">,</span> <span class="s2">"固定 0.1（停牌日贡献为 0）"</span><span class="p">],</span>
+    <span class="s2">"累计收益"</span><span class="p">:</span> <span class="p">[</span><span class="n">nav_ew</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nav_ew_fixed</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s2">"几何年化收益率"</span><span class="p">:</span> <span class="p">[(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r_ew</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">**</span> <span class="p">(</span><span class="mi">252</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_ew</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                     <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r_ew_fixed</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">**</span> <span class="p">(</span><span class="mi">252</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_ew_fixed</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s2">"年化波动率"</span><span class="p">:</span> <span class="p">[</span><span class="n">r_ew</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">),</span> <span class="n">r_ew_fixed</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">)],</span>
+    <span class="s2">"最大回撤"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="n">dd_ew</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="o">-</span><span class="n">dd_fixed</span><span class="o">.</span><span class="n">min</span><span class="p">()],</span>
+<span class="p">})</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"口径"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">sens</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">两种等权口径日收益相关系数:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">r_ew</span><span class="p">,</span> <span class="n">r_ew_fixed</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">6</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"受停牌/复牌影响的交易日数:"</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">R</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+      <span class="s2">"（占"</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">R</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">"%）"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>累计收益</th>
+<th>几何年化收益率</th>
+<th>年化波动率</th>
+<th>最大回撤</th>
+</tr>
+<tr>
+<th>口径</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>停牌日重新归一化（主口径）</th>
+<td>-0.091079</td>
+<td>-0.017238</td>
+<td>0.207027</td>
+<td>0.432771</td>
+</tr>
+<tr>
+<th>固定 0.1（停牌日贡献为 0）</th>
+<td>-0.093743</td>
+<td>-0.017763</td>
+<td>0.206742</td>
+<td>0.430613</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+两种等权口径日收益相关系数: 0.999928
+受停牌/复牌影响的交易日数: 11 （占 0.79 %）
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ec416835">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>等权口径敏感性说明</strong>：作业展示的等权公式为 $\sum 0.1 r_{i,t}$。本 Notebook 主口径在停牌或复牌跨期收益被剔除的日期，把停牌股票排除后在其余股票之间重新归一化（等价于给每只可用股票 $1/n$ 权重），而不是机械套用固定 0.1。为核验该处理是否影响结论，上表并列计算了「固定 0.1（停牌日该股贡献为 0）」口径——两者差异仅来自全年 1,384 个交易日中的少数停牌/复牌日，累计收益、几何年化、年化波动率与最大回撤几乎相同，日收益相关度接近 1，<strong>不改变等权与市值加权的相对结论</strong>。主口径采用重新归一化，是因为停牌股当日既无成交也无收益，"贡献为 0"隐含了"持仓价值不变"的额外假设，与"缺失不填零"的清洗原则更一致；但两种处理对最终结论无实质影响。</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8254e31c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 图8：两组合净值曲线</span>
@@ -12136,12 +12256,12 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=deb3e11a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d70a8db5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 权重集中度：平均权重、HHI 与等效分散只数</span>
@@ -12312,7 +12432,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=680a1f16">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=19987a7b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -12335,7 +12455,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4aeb84fd">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=eb531596">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -12347,7 +12467,7 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=51135c46">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e45d86eb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -12357,12 +12477,12 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=509d17e3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=49103bb7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 汇总表：把各节关键结果放在一张表中，便于横向复核</span>
@@ -12537,12 +12657,12 @@ r^{VW}_{p,t}=\sum_{i=1}^{10}w_{i,t-1}r_{i,t}$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=337c73e8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=efcf1a11">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 复现信息：环境、文件与审计证据</span>
@@ -12597,7 +12717,7 @@ AKShare 版本: 1.18.39
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=733e5304">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b16190b9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

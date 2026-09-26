@@ -115,6 +115,29 @@ print("差异（市值加权 − 等权）:")
 print(diff.round(6).to_string())
 print("\\n两组合日收益的相关系数:", round(float(np.corrcoef(r_ew, r_vw)[0, 1]), 4))"""))
 
+cells.append(nbf.v4.new_code_cell("""# 等权口径敏感性：固定 0.1（停牌日贡献为 0） vs 停牌日重新归一化（主口径）
+# 作业展示的等权公式为 Σ 0.1·r_i；主口径在停牌/复牌日把该股排除后重新归一化，
+# 固定 0.1 口径则始终给 10 只股票各 0.1，停牌日该股当日贡献按 0 计（持仓价值不变）。
+r_ew_fixed = (0.1 * R.fillna(0)).sum(axis=1)
+nav_ew_fixed = (1 + r_ew_fixed).cumprod()
+dd_ew = nav_ew / nav_ew.cummax() - 1
+dd_fixed = nav_ew_fixed / nav_ew_fixed.cummax() - 1
+
+sens = pd.DataFrame({
+    "口径": ["停牌日重新归一化（主口径）", "固定 0.1（停牌日贡献为 0）"],
+    "累计收益": [nav_ew.iloc[-1] - 1, nav_ew_fixed.iloc[-1] - 1],
+    "几何年化收益率": [(1 + r_ew).prod() ** (252 / len(r_ew)) - 1,
+                     (1 + r_ew_fixed).prod() ** (252 / len(r_ew_fixed)) - 1],
+    "年化波动率": [r_ew.std() * np.sqrt(252), r_ew_fixed.std() * np.sqrt(252)],
+    "最大回撤": [-dd_ew.min(), -dd_fixed.min()],
+}).set_index("口径")
+display(sens.round(6))
+print("\\n两种等权口径日收益相关系数:", round(float(np.corrcoef(r_ew, r_ew_fixed)[0, 1]), 6))
+print("受停牌/复牌影响的交易日数:", int((R.isna().any(axis=1)).sum()),
+      "（占", round((R.isna().any(axis=1)).mean() * 100, 2), "%）")"""))
+
+cells.append(nbf.v4.new_markdown_cell("""**等权口径敏感性说明**：作业展示的等权公式为 $\\sum 0.1 r_{i,t}$。本 Notebook 主口径在停牌或复牌跨期收益被剔除的日期，把停牌股票排除后在其余股票之间重新归一化（等价于给每只可用股票 $1/n$ 权重），而不是机械套用固定 0.1。为核验该处理是否影响结论，上表并列计算了「固定 0.1（停牌日该股贡献为 0）」口径——两者差异仅来自全年 1,384 个交易日中的少数停牌/复牌日，累计收益、几何年化、年化波动率与最大回撤几乎相同，日收益相关度接近 1，**不改变等权与市值加权的相对结论**。主口径采用重新归一化，是因为停牌股当日既无成交也无收益，"贡献为 0"隐含了"持仓价值不变"的额外假设，与"缺失不填零"的清洗原则更一致；但两种处理对最终结论无实质影响。"""))
+
 cells.append(nbf.v4.new_code_cell("""# 图8：两组合净值曲线
 fig, ax = plt.subplots(figsize=(14, 6.5))
 ax.plot(nav_ew.index, nav_ew, label="等权组合", color="tab:blue", linewidth=1.5)
