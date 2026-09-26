@@ -84,14 +84,17 @@ import platform
 import pandas as pd
 from IPython.display import display
 
-PROJECT = Path.cwd()
-if not (PROJECT / "audit" / "source_manifest_akshare.csv").exists():
-    # 允许从个人仓库根目录启动Notebook
-    candidate = Path.cwd() / "hw-02"
-    if (candidate / "audit" / "source_manifest_akshare.csv").exists():
+# 定位项目目录：以数据快照本身为锚点（data/processed/ 日度底表）
+DATA_FILE = Path("data/processed/daily_stock_data_20201231_20260916.csv")
+PROJECT = None
+for candidate in [Path.cwd(), Path.cwd() / "hw02-1", Path.cwd().parent / "hw02-1"]:
+    if (candidate / DATA_FILE).exists():
         PROJECT = candidate
-    else:
-        raise FileNotFoundError("未找到HW02-1审计文件，请先运行数据下载脚本。")
+        break
+if PROJECT is None:
+    raise FileNotFoundError(
+        "未找到 HW02-1 数据快照 data/processed/daily_stock_data_20201231_20260916.csv。"
+        "请在仓库根目录或 hw02-1/ 目录下打开本 Notebook，然后 Restart & Run All。")
 
 pd.set_option("display.max_colwidth", 60)
 print("Python:", platform.python_version())

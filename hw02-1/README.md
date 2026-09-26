@@ -117,7 +117,7 @@ pip install -r requirements.txt
 jupyter notebook hw02-1.ipynb     # 内核选择 Python (FinEco)，Restart & Run All
 ```
 
-Notebook 第 00 个代码单元会自动定位项目目录：若当前目录下找不到 `audit/source_manifest_akshare.csv`，会回退检查 `./hw02-1`。因此从仓库根目录或 `hw02-1/` 目录启动均可。
+Notebook 第 00 个代码单元会以数据快照（data/processed/ 日度底表）为锚点自动定位项目目录，从仓库根目录或 hw02-1/ 目录打开均可运行。
 
 ### 路径 B：重新下载（会覆盖 raw 与 processed，仅在需要更新数据时使用）
 
