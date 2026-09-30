@@ -7511,46 +7511,139 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1bb1483b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=aa0f5953">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="HW02-2%EF%BC%9A%E6%88%BF%E5%9C%B0%E4%BA%A7%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8%E8%B4%A2%E5%8A%A1%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90">HW02-2：房地产上市公司财务特征分析<a class="anchor-link" href="#HW02-2%EF%BC%9A%E6%88%BF%E5%9C%B0%E4%BA%A7%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8%E8%B4%A2%E5%8A%A1%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90">¶</a></h1><ul>
-<li><strong>姓名：</strong>朱家瑞</li>
-<li><strong>学号：</strong>23347105</li>
-<li><strong>作业简介或教师作业页面链接：</strong><a href="https://lianxhcn.github.io/FinEco/exercises/hw-02.html">https://lianxhcn.github.io/FinEco/exercises/hw-02.html</a></li>
-<li><strong>个人 GitHub 仓库访问地址：</strong><a href="https://github.com/Jaremy112/fineco-homework">https://github.com/Jaremy112/fineco-homework</a></li>
-<li><strong>HW02-1 目录链接：</strong><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1</a></li>
-<li><strong>HW02-2 目录链接：</strong><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2</a></li>
-<li><strong>数据来源、获取日期与样本期间：</strong>CSMAR（国泰安）数据中心 <code>https://data.csmar.com/</code>，本人凭中山大学机构订阅账号于 2026-09-24 至 2026-09-25 手动导出 5 张表：资产负债表（2005—2015 与 2004 年末）、利润表（2005—2015）、股权性质文件（2004—2015）、上市公司基本信息年度表（2004—2015）。样本期间 2005—2015 各会计年度，另取 2004 年末数据用于平均总资产/权益的期初分母。原始文件属受限数据，不入公开仓库；下载条件、字段清单与单位见同目录 <code>DATA_MANIFEST.md</code>、<code>data/README.md</code> 与 <code>field_mapping.csv</code>。</li>
-<li><strong>作业网站（首页与本题页面）：</strong><a href="https://jaremy112.github.io/fineco-homework/">https://jaremy112.github.io/fineco-homework/</a> ｜ <a href="https://jaremy112.github.io/fineco-homework/hw02-2.html">https://jaremy112.github.io/fineco-homework/hw02-2.html</a></li>
-<li><strong>AI 使用声明：</strong>使用了 WorkBuddy（Hermes Agent）辅助核对作业口径、编写数据处理代码与审计脚本；全部数据由本人手动从 CSMAR 导出。变量口径、样本取舍与结论由本人核定，详见文末"AI 使用声明"。</li>
-</ul>
-<h2 id="%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">分析目的与总体思路<a class="anchor-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">¶</a></h2><p>本题考察 2005—2015 年房地产 A 股上市公司的数量、产权结构与财务特征。思路分四步：<strong>第一步</strong>，把 5 张 CSMAR 原始表统一清洗为"企业—年度"非平衡面板（合并报表、年末记录、A 股），行业身份按当年证监会分类逐年判定（2001 版 J* / 2012 版 K70），产权按当年实际控制人性质分为国有、民营、其他、不明四类；<strong>第二步</strong>，逐年统计公司总数与产权结构；<strong>第三步</strong>，按作业统一口径计算六项财务指标（资产负债率、bankloan、短期负债占比、ROA、ROE、Cash_TA）；<strong>第四步</strong>，对每项指标给出全样本均值与中位数时序、国有与民营的均值与中位数比较、年度有效样本量，并对离群值做保留、标识与剔除前后敏感性比较。全部处理遵循"说明—代码与实际输出—结果解读"结构。</p>
+<h1 id="HW02-2%EF%BC%9A%E6%88%BF%E5%9C%B0%E4%BA%A7%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8%E8%B4%A2%E5%8A%A1%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90">HW02-2：房地产上市公司财务特征分析<a class="anchor-link" href="#HW02-2%EF%BC%9A%E6%88%BF%E5%9C%B0%E4%BA%A7%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8%E8%B4%A2%E5%8A%A1%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90">¶</a></h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>姓名</td>
+<td>朱家瑞</td>
+</tr>
+<tr>
+<td>学号</td>
+<td>23347105</td>
+</tr>
+<tr>
+<td>作业简介或教师作业页面链接</td>
+<td><a href="https://lianxhcn.github.io/FinEco/exercises/hw-02.html">https://lianxhcn.github.io/FinEco/exercises/hw-02.html</a></td>
+</tr>
+<tr>
+<td>个人 GitHub 仓库访问地址</td>
+<td><a href="https://github.com/Jaremy112/fineco-homework">https://github.com/Jaremy112/fineco-homework</a></td>
+</tr>
+<tr>
+<td>HW02-1 目录链接</td>
+<td><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-1</a></td>
+</tr>
+<tr>
+<td>HW02-2 目录链接</td>
+<td><a href="https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2">https://github.com/Jaremy112/fineco-homework/tree/main/hw02-2</a></td>
+</tr>
+<tr>
+<td>数据来源、获取日期与样本期间</td>
+<td>CSMAR（国泰安）数据中心 <a href="https://data.csmar.com/">https://data.csmar.com/</a> ，本人凭中山大学机构订阅账号于 2026-09-24 至 2026-09-25 手动导出 5 张表：资产负债表（2005—2015 与 2004 年末）、利润表（2005—2015）、股权性质文件（2004—2015）、上市公司基本信息年度表（2004—2015）。样本期间 2005—2015 各会计年度，另取 2004 年末数据用于平均总资产/权益的期初分母。原始文件属受限数据，不入公开仓库；下载条件、字段清单与单位见同目录 DATA_MANIFEST.md、data/README.md 与 field_mapping.csv</td>
+</tr>
+<tr>
+<td>作业网站（首页与本题页面）</td>
+<td><a href="https://jaremy112.github.io/fineco-homework/">https://jaremy112.github.io/fineco-homework/</a> ｜ <a href="https://jaremy112.github.io/fineco-homework/hw02-2.html">https://jaremy112.github.io/fineco-homework/hw02-2.html</a></td>
+</tr>
+<tr>
+<td>AI 使用声明</td>
+<td>使用了 WorkBuddy（Hermes Agent）辅助核对作业口径、编写数据处理代码与审计脚本；全部数据由本人手动从 CSMAR 导出。变量口径、样本取舍与结论由本人核定，详见文末"AI 使用声明"</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">分析目的与总体思路<a class="anchor-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E7%9A%84%E4%B8%8E%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF">¶</a></h2><p>本题考察 2005—2015 年房地产 A 股上市公司的数量、产权结构与财务特征。思路分四步：<strong>第一步</strong>，把 5 张 CSMAR 原始表统一清洗为"企业—年度"非平衡面板（合并报表、年末记录、A 股），行业身份按当年证监会分类逐年判定（2001 版 J* / 2012 版 K70），产权按当年实际控制人性质分为国有、民营、其他、不明四类；<strong>第二步</strong>，逐年统计公司总数与产权结构；** 第三步<strong>，按作业统一口径计算六项财务指标（资产负债率、bankloan、短期负债占比、ROA、ROE、Cash_TA）；</strong> 第四步**，对每项指标给出全样本均值与中位数时序、国有与民营的均值与中位数比较、年度有效样本量，并对离群值做保留、标识与剔除前后敏感性比较。全部处理遵循"说明—代码与实际输出—结果解读"结构。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=df704594">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=adaba857">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E4%B8%80%E3%80%81%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%AD%97%E6%AE%B5%EF%BC%9A%E4%BB%8E-5-%E5%BC%A0-CSMAR-%E5%8E%9F%E5%A7%8B%E8%A1%A8%E5%88%B0%E7%BB%9F%E4%B8%80%E8%AF%BB%E5%8F%96">一、样本与字段：从 5 张 CSMAR 原始表到统一读取<a class="anchor-link" href="#%E4%B8%80%E3%80%81%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%AD%97%E6%AE%B5%EF%BC%9A%E4%BB%8E-5-%E5%BC%A0-CSMAR-%E5%8E%9F%E5%A7%8B%E8%A1%A8%E5%88%B0%E7%BB%9F%E4%B8%80%E8%AF%BB%E5%8F%96">¶</a></h2><p><strong>要回答的问题</strong>：5 张原始表各自覆盖什么、主键是否唯一、能否支撑"企业—年度"面板。</p>
-<p><strong>做法与口径</strong>：</p>
+<h2 id="%E6%A0%B7%E6%9C%AC%E7%AD%9B%E9%80%89%E8%B7%AF%E7%BA%BF%E5%9B%BE%EF%BC%88%E6%AF%8F%E4%B8%80%E6%AD%A5%E5%89%94%E9%99%A4%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%89">样本筛选路线图（每一步剔除了什么）<a class="anchor-link" href="#%E6%A0%B7%E6%9C%AC%E7%AD%9B%E9%80%89%E8%B7%AF%E7%BA%BF%E5%9B%BE%EF%BC%88%E6%AF%8F%E4%B8%80%E6%AD%A5%E5%89%94%E9%99%A4%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%89">¶</a></h2><p>从原始下载到最终分析样本，共经历以下筛选，每一步的剔除对象与理由如下（精确行数见文末"样本处理表"）：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>保留/剔除</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 合并报表</td>
+<td>只保留 <code>Typrep=A</code>；** 剔除** 母公司报表（B）</td>
+<td>作业要求年度合并报表；母公司口径与合并口径差异巨大（如万科 2015 母公司净利润 99.5 亿 vs 合并 259.5 亿）</td>
+</tr>
+<tr>
+<td>② 年末记录</td>
+<td>只保留 <code>Accper</code> 为 12-31 的记录；** 剔除** 季报与 01-01 期初行</td>
+<td>作业要求年度数据；季报/期初行不是年度报表</td>
+</tr>
+<tr>
+<td>③ A 股</td>
+<td>** 剔除** B 股（代码 200/900 前缀，共 5 家：帝贤B、雷伊B、新城B股、凌云B股等）</td>
+<td>作业明确研究对象为"房地产 <strong>A 股</strong> 上市公司"；按代码前缀剔除，不依赖简称</td>
+</tr>
+<tr>
+<td>④ 行业身份</td>
+<td>** 剔除** 当年不属于房地产业的公司观测（约 645 个观测）</td>
+<td>候选池是"任一年曾属 J01"的 170 家，其中 13 家（华侨城A、张江高科、鲁能泰山等园区/转型公司）在样本期内从未再归入房地产；行业按当年证监会分类逐年判定（2011 及以前 J*，2012 起 K70），不用当前行业回填历史</td>
+</tr>
+<tr>
+<td>⑤ 上市前报表</td>
+<td><strong>剔除</strong> 早于首次上市年份的观测（合肥城建 2007 年报，2008 年才上市）</td>
+<td>按"各年年末上市状态"构建面板，未上市公司不应进入当年样本</td>
+</tr>
+<tr>
+<td>⑥ 产权缺失</td>
+<td>** 不剔除**，归入"不明"类</td>
+<td>作业允许不明类别；招商积余（001914）全期无股权性质记录，删除公司会损失样本</td>
+</tr>
+<tr>
+<td>⑦ 负权益等极端值</td>
+<td>** 不剔除**，保留并标识，另做剔除前后敏感性比较</td>
+<td>属真实财务状况（资不抵债 ST 公司），删除会扭曲行业杠杆的真实分布；影响用中位数与敏感性分析控制</td>
+</tr>
+</tbody>
+</table>
+<p>此外两点不作为"剔除"但影响可用样本：ROA/ROE 需要 2004 年末或上年末数据，公司面板首年（IPO 当年）天然缺上年末分母，对应指标记为缺失（9 个观测），不填补；零分母（如总负债为 0）同样记缺失而非填零。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ae3a639e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%E4%B8%80%E3%80%81%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%AD%97%E6%AE%B5%EF%BC%9A%E4%BB%8E-5-%E5%BC%A0-CSMAR-%E5%8E%9F%E5%A7%8B%E8%A1%A8%E5%88%B0%E7%BB%9F%E4%B8%80%E8%AF%BB%E5%8F%96">一、样本与字段：从 5 张 CSMAR 原始表到统一读取<a class="anchor-link" href="#%E4%B8%80%E3%80%81%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%AD%97%E6%AE%B5%EF%BC%9A%E4%BB%8E-5-%E5%BC%A0-CSMAR-%E5%8E%9F%E5%A7%8B%E8%A1%A8%E5%88%B0%E7%BB%9F%E4%B8%80%E8%AF%BB%E5%8F%96">¶</a></h2><p>** 要回答的问题**：5 张原始表各自覆盖什么、主键是否唯一、能否支撑"企业—年度"面板。</p>
+<p>** 做法与口径**：</p>
 <ul>
 <li>原始文件位于本目录 <code>data/raw/</code>（受限数据，不入公开仓库），Notebook 以相对路径读取；</li>
 <li>每张表保留 CSMAR 原始字段，分析变量对照见 <code>field_mapping.csv</code>；</li>
-<li>金额单位为<strong>元</strong>（已用万科 2015 年年报数值核验）；</li>
+<li>金额单位为** 元**（已用万科 2015 年年报数值核验）；</li>
 <li>导出条件、下载日期与数据版本见 <code>DATA_MANIFEST.md</code>。</li>
 </ul>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=42cd6f38">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=44b615b2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7624,25 +7717,142 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b7308500">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2e041159">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：5 张表全部读入成功。资产负债表与利润表各约 1.8 万行、覆盖 170 家公司（企业—年度×季报频率），年度表覆盖 2,910 家、2004—2015 全部年份。年度表是本题主线：它给出<strong>逐年</strong>的行业代码与上市状态，是"不能用当前行业覆盖历史年份"得以落实的关键。早期曾误用 CSMAR 的"行业分类表"（<code>STK_INDUSTRYCLASS</code>，变更事件表），万科这类从未变更行业的公司反而没有记录，已废弃改用年度表。</p>
+<p>** 解读<strong>：5 张表全部读入成功。资产负债表与利润表各约 1.8 万行、覆盖 170 家公司（企业—年度×季报频率），年度表覆盖 2,910 家、2004—2015 全部年份。年度表是本题主线：它给出</strong> 逐年** 的行业代码与上市状态，是"不能用当前行业覆盖历史年份"得以落实的关键。早期曾误用 CSMAR 的"行业分类表"（<code>STK_INDUSTRYCLASS</code>，变更事件表），万科这类从未变更行业的公司反而没有记录，已废弃改用年度表。</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=939bef7f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># 数据表概览：表名 | 原始行数 | 覆盖日期 | 来源 | 在本题中的作用</span>
+<span class="n">overview</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">"数据表"</span><span class="p">:</span> <span class="s2">"资产负债表 FS_Combas"</span><span class="p">,</span> <span class="s2">"原始行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">bs</span><span class="p">),</span>
+     <span class="s2">"覆盖日期"</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+     <span class="s2">"来源"</span><span class="p">:</span> <span class="s2">"CSMAR 中国上市公司财务报表数据库（合并报表，170 家 A 股房地产候选池，2005—2015）"</span><span class="p">,</span>
+     <span class="s2">"作用"</span><span class="p">:</span> <span class="s2">"六指标的分母与科目：总资产、总负债、流动负债、短期/长期借款、所有者权益、货币资金"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"数据表"</span><span class="p">:</span> <span class="s2">"资产负债表 2004 年末"</span><span class="p">,</span> <span class="s2">"原始行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">bs04</span><span class="p">),</span>
+     <span class="s2">"覆盖日期"</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">bs04</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">bs04</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+     <span class="s2">"来源"</span><span class="p">:</span> <span class="s2">"同上（单独导出 2004-01-01~2004-12-31，158 家）"</span><span class="p">,</span>
+     <span class="s2">"作用"</span><span class="p">:</span> <span class="s2">"2005 年 ROA/ROE 平均分母的期初值（上年末资产/权益）"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"数据表"</span><span class="p">:</span> <span class="s2">"利润表 FS_Comins"</span><span class="p">,</span> <span class="s2">"原始行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">inc</span><span class="p">),</span>
+     <span class="s2">"覆盖日期"</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">inc</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">inc</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+     <span class="s2">"来源"</span><span class="p">:</span> <span class="s2">"CSMAR 中国上市公司财务报表数据库（合并+母公司，170 家，2005—2015）"</span><span class="p">,</span>
+     <span class="s2">"作用"</span><span class="p">:</span> <span class="s2">"ROA/ROE 的分子：净利润（合并口径 B002000000）、归母净利润"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"数据表"</span><span class="p">:</span> <span class="s2">"股权性质 EN_EquityNatureAll"</span><span class="p">,</span> <span class="s2">"原始行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">own</span><span class="p">),</span>
+     <span class="s2">"覆盖日期"</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">own</span><span class="p">[</span><span class="s2">"EndDate"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">own</span><span class="p">[</span><span class="s2">"EndDate"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+     <span class="s2">"来源"</span><span class="p">:</span> <span class="s2">"CSMAR 中国上市公司股权性质文件（170 家，逐年）"</span><span class="p">,</span>
+     <span class="s2">"作用"</span><span class="p">:</span> <span class="s2">"产权分组：国有/民营/外资/其他，按当年实际控制人性质"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"数据表"</span><span class="p">:</span> <span class="s2">"基本信息年度表 STK_LISTEDCOINFOANL"</span><span class="p">,</span> <span class="s2">"原始行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ann</span><span class="p">),</span>
+     <span class="s2">"覆盖日期"</span><span class="p">:</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="s2">"EndDate"</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s1"> ~ </span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="s2">"EndDate"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span>
+     <span class="s2">"来源"</span><span class="p">:</span> <span class="s2">"CSMAR 上市公司基本信息年度表（全市场 2,910 家）"</span><span class="p">,</span>
+     <span class="s2">"作用"</span><span class="p">:</span> <span class="s2">"逐年行业代码（判定当年是否房地产）、上市状态与上市日期（面板进出）"</span><span class="p">},</span>
+<span class="p">])</span>
+<span class="n">overview</span>
+</pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=500642be">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>数据表</th>
+<th>原始行数</th>
+<th>覆盖日期</th>
+<th>来源</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>资产负债表 FS_Combas</td>
+<td>18044</td>
+<td>2005-01-01 ~ 2015-12-31</td>
+<td>CSMAR 中国上市公司财务报表数据库（合并报表，170 家 A 股房地产候选池，2005—...</td>
+<td>六指标的分母与科目：总资产、总负债、流动负债、短期/长期借款、所有者权益、货币资金</td>
+</tr>
+<tr>
+<th>1</th>
+<td>资产负债表 2004 年末</td>
+<td>1530</td>
+<td>2004-01-01 ~ 2004-12-31</td>
+<td>同上（单独导出 2004-01-01~2004-12-31，158 家）</td>
+<td>2005 年 ROA/ROE 平均分母的期初值（上年末资产/权益）</td>
+</tr>
+<tr>
+<th>2</th>
+<td>利润表 FS_Comins</td>
+<td>18089</td>
+<td>2005-01-01 ~ 2015-12-31</td>
+<td>CSMAR 中国上市公司财务报表数据库（合并+母公司，170 家，2005—2015）</td>
+<td>ROA/ROE 的分子：净利润（合并口径 B002000000）、归母净利润</td>
+</tr>
+<tr>
+<th>3</th>
+<td>股权性质 EN_EquityNatureAll</td>
+<td>1979</td>
+<td>2004-12-31 ~ 2015-12-31</td>
+<td>CSMAR 中国上市公司股权性质文件（170 家，逐年）</td>
+<td>产权分组：国有/民营/外资/其他，按当年实际控制人性质</td>
+</tr>
+<tr>
+<th>4</th>
+<td>基本信息年度表 STK_LISTEDCOINFOANL</td>
+<td>24197</td>
+<td>2004-12-31 ~ 2015-12-31</td>
+<td>CSMAR 上市公司基本信息年度表（全市场 2,910 家）</td>
+<td>逐年行业代码（判定当年是否房地产）、上市状态与上市日期（面板进出）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=aa9e3219">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E4%BA%8C%E3%80%81%E6%B8%85%E6%B4%97%E4%B8%8E%E4%BC%81%E4%B8%9A%E2%80%94%E5%B9%B4%E5%BA%A6%E9%9D%A2%E6%9D%BF">二、清洗与企业—年度面板<a class="anchor-link" href="#%E4%BA%8C%E3%80%81%E6%B8%85%E6%B4%97%E4%B8%8E%E4%BC%81%E4%B8%9A%E2%80%94%E5%B9%B4%E5%BA%A6%E9%9D%A2%E6%9D%BF">¶</a></h2><p><strong>要回答的问题</strong>：如何从原始行得到合并报表口径的年末企业—年度观测，键是否唯一，合并是否无损。</p>
-<p><strong>口径与检查事项</strong>：</p>
+<h2 id="%E4%BA%8C%E3%80%81%E6%B8%85%E6%B4%97%E4%B8%8E%E4%BC%81%E4%B8%9A%E2%80%94%E5%B9%B4%E5%BA%A6%E9%9D%A2%E6%9D%BF">二、清洗与企业—年度面板<a class="anchor-link" href="#%E4%BA%8C%E3%80%81%E6%B8%85%E6%B4%97%E4%B8%8E%E4%BC%81%E4%B8%9A%E2%80%94%E5%B9%B4%E5%BA%A6%E9%9D%A2%E6%9D%BF">¶</a></h2><p>** 要回答的问题**：如何从原始行得到合并报表口径的年末企业—年度观测，键是否唯一，合并是否无损。</p>
+<p>** 口径与检查事项**：</p>
 <ol>
 <li>报表类型只保留 <code>Typrep=A</code>（合并报表），不混用母公司口径；</li>
 <li>会计期间只保留 <code>Accper=12-31</code> 年末记录（季报与 1 月 1 日期初记录不进面板）；</li>
@@ -7653,12 +7863,12 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7638e323">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=806eda17">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">BS_FIELDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"A001000000"</span><span class="p">:</span> <span class="s2">"assets"</span><span class="p">,</span> <span class="s2">"A002000000"</span><span class="p">:</span> <span class="s2">"liabilities"</span><span class="p">,</span>
@@ -7700,7 +7910,12 @@ a.anchor-link {
       <span class="n">inc_ye</span><span class="o">.</span><span class="n">duplicated</span><span class="p">([</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"Accper"</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s2">"条（均为 0，同一公司年度只有一份合并报表）"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"发生过差错更正(IfCorrect=1)的观测：资产负债表"</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">bs_ye</span><span class="p">[</span><span class="s2">"IfCorrect"</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
       <span class="s2">"条；利润表"</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">inc_ye</span><span class="p">[</span><span class="s2">"IfCorrect"</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
-      <span class="s2">"条（CSMAR 提供更正后版本，无法回溯原报表，故面板不含重复报表，但需知悉其为修订后数据）"</span><span class="p">)</span>
+      <span class="s2">"条（含义见下方解读）"</span><span class="p">)</span>
+
+<span class="c1"># 差错更正观测的分布：涉及多少家公司、哪些年份</span>
+<span class="n">ic_bs</span> <span class="o">=</span> <span class="n">bs_ye</span><span class="p">[</span><span class="n">bs_ye</span><span class="p">[</span><span class="s2">"IfCorrect"</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"涉及公司：资产负债表"</span><span class="p">,</span> <span class="n">ic_bs</span><span class="p">[</span><span class="s2">"Stkcd"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span> <span class="s2">"家；年份分布（前6）："</span><span class="p">,</span>
+      <span class="nb">dict</span><span class="p">(</span><span class="n">ic_bs</span><span class="p">[</span><span class="s2">"Accper"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">6</span><span class="p">)))</span>
 
 <span class="c1"># 面板：资产负债表为主表，左连利润表</span>
 <span class="n">panel</span> <span class="o">=</span> <span class="n">bsx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">incx</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"fiscal_year"</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s2">"1:1"</span><span class="p">,</span> <span class="n">indicator</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -7725,13 +7940,14 @@ a.anchor-link {
 <pre>资产负债表重复键: 0 | 利润表重复键: 0 | 04表重复键: 0
 
 重复报表检查：年末合并记录主键重复 —— 资产负债表 0 条；利润表 0 条（均为 0，同一公司年度只有一份合并报表）
-发生过差错更正(IfCorrect=1)的观测：资产负债表 223 条；利润表 185 条（CSMAR 提供更正后版本，无法回溯原报表，故面板不含重复报表，但需知悉其为修订后数据）
+发生过差错更正(IfCorrect=1)的观测：资产负债表 223 条；利润表 185 条（含义见下方解读）
+涉及公司：资产负债表 119 家；年份分布（前6）： {'2005': np.int64(11), '2006': np.int64(22), '2007': np.int64(22), '2008': np.int64(18), '2009': np.int64(13), '2010': np.int64(17)}
 利润表未匹配观测: 0
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7813,40 +8029,41 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=487fc381">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fa6f6ae6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：主键检查全部为 0 重复，说明 CSMAR 该导出在"证券代码×年末"粒度上干净。合并报表+年末+A 股三步筛选后，得到 <strong>1,821 个企业—年度观测、170 家公司</strong>；利润表左连后未匹配为 0，两表覆盖完全一致。1,821 &lt; 170×11 = 1,870，差出的 49 个观测来自公司在样本期内的上市与退市——这正是作业要求的<strong>非平衡面板</strong>。</p>
+<p>** 解读<strong>：主键检查全部为 0 重复，说明 CSMAR 该导出在"证券代码×年末"粒度上干净。合并报表+年末+A 股三步筛选后，得到 **1,821 个企业—年度观测、170 家公司</strong>；利润表左连后未匹配为 0，两表覆盖完全一致。1,821 &lt; 170×11 = 1,870，差出的 49 个观测来自公司在样本期内的上市与退市——这正是作业要求的** 非平衡面板**。</p>
+<p>** 关于"差错更正"（IfCorrect=1）<strong>：这是 CSMAR 的标记字段，含义是该份报表在首次披露之后曾被公司</strong> 更正或追溯重述过<strong>（常见原因：会计差错更正、会计政策变更追溯调整、并购重组下的重述）。资产负债表 223 条、利润表 185 条观测带此标记，集中在 2007 年前后（新旧会计准则切换期重述最多）。需要注意两点：① CSMAR 只提供</strong> 更正后的最终版本**，原始报表无法回溯，因此面板不存在"同一公司年度两份报表"的重复问题；② 这意味着我们使用的 2005—2007 年数值部分是新准则口径的重述值，与当年投资者实际看到的原始报表可能有差异——对本研究（描述 2005—2015 年的行业财务特征）而言，使用重述后的可比口径反而更合适。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cfee3da3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=df2916c8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E4%B8%89%E3%80%81%E9%80%90%E5%B9%B4%E8%A1%8C%E4%B8%9A%E5%88%A4%E5%AE%9A%E4%B8%8E%E4%B8%8A%E5%B8%82%E7%8A%B6%E6%80%81%EF%BC%88%E8%B7%A8%E6%A0%87%E5%87%86%E6%98%A0%E5%B0%84%EF%BC%89">三、逐年行业判定与上市状态（跨标准映射）<a class="anchor-link" href="#%E4%B8%89%E3%80%81%E9%80%90%E5%B9%B4%E8%A1%8C%E4%B8%9A%E5%88%A4%E5%AE%9A%E4%B8%8E%E4%B8%8A%E5%B8%82%E7%8A%B6%E6%80%81%EF%BC%88%E8%B7%A8%E6%A0%87%E5%87%86%E6%98%A0%E5%B0%84%EF%BC%89">¶</a></h2><p><strong>要回答的问题</strong>：某年年末这家公司是否属于房地产；如何处理 2012 年前后的分类标准切换。</p>
-<p><strong>映射方式（作业要求说明）</strong>：</p>
+<h2 id="%E4%B8%89%E3%80%81%E9%80%90%E5%B9%B4%E8%A1%8C%E4%B8%9A%E5%88%A4%E5%AE%9A%E4%B8%8E%E4%B8%8A%E5%B8%82%E7%8A%B6%E6%80%81%EF%BC%88%E8%B7%A8%E6%A0%87%E5%87%86%E6%98%A0%E5%B0%84%EF%BC%89">三、逐年行业判定与上市状态（跨标准映射）<a class="anchor-link" href="#%E4%B8%89%E3%80%81%E9%80%90%E5%B9%B4%E8%A1%8C%E4%B8%9A%E5%88%A4%E5%AE%9A%E4%B8%8E%E4%B8%8A%E5%B8%82%E7%8A%B6%E6%80%81%EF%BC%88%E8%B7%A8%E6%A0%87%E5%87%86%E6%98%A0%E5%B0%84%EF%BC%89">¶</a></h2><p>** 要回答的问题**：某年年末这家公司是否属于房地产；如何处理 2012 年前后的分类标准切换。</p>
+<p>** 映射方式（作业要求说明）**：</p>
 <ul>
 <li>年度表 <code>IndustryCode</code> 按各年年末的当期有效标准给出；</li>
 <li><strong>2011 年及以前用证监会 2001 版</strong>：门类 J = 房地产业（J01 房地产开发与经营业等）；</li>
 <li><strong>2012 年起用证监会 2012 版</strong>：K70 = 房地产业。注意 2012 版的 <code>J*</code> 已经是<strong>金融业</strong>（J66 货币金融、J67 资本市场、J68 保险、J69 其他金融），若沿用 J 前缀会把约 42 家金融机构误判为房地产；</li>
-<li>样本 = 2005—2015 <strong>任一年末</strong>属于房地产的公司并集（170 家），而非当前仍属房地产的公司——作业明令禁止只从当前行业向前追溯。</li>
+<li>样本 = 2005—2015 ** 任一年末** 属于房地产的公司并集（170 家），而非当前仍属房地产的公司——作业明令禁止只从当前行业向前追溯。</li>
 </ul>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a32d6de0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e7b0b780">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ann</span><span class="p">[</span><span class="s2">"Symbol"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ann</span><span class="p">[</span><span class="s2">"Symbol"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
@@ -7943,39 +8160,39 @@ fiscal_year
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4b1e5117">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=764fa976">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：年度表对 1,821 个观测全部可判定（缺失 0）；没有早于首次上市年份的观测（0 条），说明面板不含"上市前"记录。上市状态逐年保留 ST、*ST 与暂停上市公司——这些公司恰恰贡献了后文的负权益极端值，按讲义"基础库阶段不提前剔除"的原则保留并标识。<strong>关于样本量的说明</strong>：若按 CSMAR 当前分类的静态代码池（117 家）取样，2005 年房地产公司覆盖率只有 62%；改为"任一年为房地产"的动态并集（170 家）后，各年相对全市场房地产公司的覆盖率达 97%—99%，缺的 5 家全为 B 股（本就排除）。</p>
+<p>** 解读<strong>：年度表对 1,821 个观测全部可判定（缺失 0）；没有早于首次上市年份的观测（0 条），说明面板不含"上市前"记录。上市状态逐年保留 ST、*ST 与暂停上市公司——这些公司恰恰贡献了后文的负权益极端值，按讲义"基础库阶段不提前剔除"的原则保留并标识。</strong>关于样本量的说明**：若按 CSMAR 当前分类的静态代码池（117 家）取样，2005 年房地产公司覆盖率只有 62%；改为"任一年为房地产"的动态并集（170 家）后，各年相对全市场房地产公司的覆盖率达 97%—99%，缺的 5 家全为 B 股（本就排除）。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a6f0054e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=06547d24">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E5%9B%9B%E3%80%81%E4%BA%A7%E6%9D%83%E5%88%86%E7%BB%84%EF%BC%9A%E5%9B%BD%E6%9C%89-/-%E6%B0%91%E8%90%A5-/-%E5%85%B6%E4%BB%96-/-%E4%B8%8D%E6%98%8E">四、产权分组：国有 / 民营 / 其他 / 不明<a class="anchor-link" href="#%E5%9B%9B%E3%80%81%E4%BA%A7%E6%9D%83%E5%88%86%E7%BB%84%EF%BC%9A%E5%9B%BD%E6%9C%89-/-%E6%B0%91%E8%90%A5-/-%E5%85%B6%E4%BB%96-/-%E4%B8%8D%E6%98%8E">¶</a></h2><p><strong>要回答的问题</strong>：按<strong>当年</strong>实际控制人性质如何分组；"非国有"为什么不能直接等于"民营"。</p>
-<p><strong>规则</strong>：原始字段 <code>EquityNature</code> 取值有国企、民营、外资、其他、复合值（如"民营,外资"）与缺失。映射规则：</p>
+<h2 id="%E5%9B%9B%E3%80%81%E4%BA%A7%E6%9D%83%E5%88%86%E7%BB%84%EF%BC%9A%E5%9B%BD%E6%9C%89-/-%E6%B0%91%E8%90%A5-/-%E5%85%B6%E4%BB%96-/-%E4%B8%8D%E6%98%8E">四、产权分组：国有 / 民营 / 其他 / 不明<a class="anchor-link" href="#%E5%9B%9B%E3%80%81%E4%BA%A7%E6%9D%83%E5%88%86%E7%BB%84%EF%BC%9A%E5%9B%BD%E6%9C%89-/-%E6%B0%91%E8%90%A5-/-%E5%85%B6%E4%BB%96-/-%E4%B8%8D%E6%98%8E">¶</a></h2><p>** 要回答的问题<strong>：按</strong> 当年** 实际控制人性质如何分组；"非国有"为什么不能直接等于"民营"。</p>
+<p>** 规则**：原始字段 <code>EquityNature</code> 取值有国企、民营、外资、其他、复合值（如"民营,外资"）与缺失。映射规则：</p>
 <ul>
-<li>国企 → <strong>国有</strong>；纯"民营" → <strong>民营</strong>；</li>
-<li>外资、其他、以及含多种成分的复合值 → <strong>其他</strong>（复合值中若含国企按国有处理）；</li>
-<li>缺失 → <strong>不明</strong>。全部逐年取值，产权变化保留原样。</li>
+<li>国企 → ** 国有<strong>；纯"民营" → ** 民营</strong>；</li>
+<li>外资、其他、以及含多种成分的复合值 → ** 其他**（复合值中若含国企按国有处理）；</li>
+<li>缺失 → ** 不明**。全部逐年取值，产权变化保留原样。</li>
 </ul>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=62a661ce">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a7dd8722">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">own</span><span class="p">[</span><span class="s2">"Symbol"</span><span class="p">]</span> <span class="o">=</span> <span class="n">own</span><span class="p">[</span><span class="s2">"Symbol"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
@@ -8037,34 +8254,34 @@ prev  ownership
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b8e8d9ce">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=850efbf0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：1,979 行股权性质数据覆盖全部 170 家公司的 2004—2015 年份，仅招商积余（001914）因代码段切换无记录，归入"不明"而不删除（作业允许不明类别存在，此时国有与民营占比之和小于 100%）。原始值里确有"民营,外资"这类复合性质和少量缺失，映射规则保证非国有不等于民营。</p>
-<p><strong>产权会变</strong>：全样本有 <strong>26 个企业—年度观测、23 家公司</strong>发生过产权变更，其中 5 次国有→民营、2 次民营→国有，另有 7 次民营转其他、4 次转为不明。这意味着"国有组"与"民营组"是<strong>逐年重分类</strong>的结果，不是两批固定公司——因此后文的组间差异不能解读为"同一批公司随时间的变动"，这与作业"描述性差异不能直接解释为产权的因果作用"一致。</p>
+<p>** 解读**：1,979 行股权性质数据覆盖全部 170 家公司的 2004—2015 年份，仅招商积余（001914）因代码段切换无记录，归入"不明"而不删除（作业允许不明类别存在，此时国有与民营占比之和小于 100%）。原始值里确有"民营,外资"这类复合性质和少量缺失，映射规则保证非国有不等于民营。</p>
+<p>** 产权会变<strong>：全样本有 **26 个企业—年度观测、23 家公司</strong> 发生过产权变更，其中 5 次国有→民营、2 次民营→国有，另有 7 次民营转其他、4 次转为不明。这意味着"国有组"与"民营组"是** 逐年重分类** 的结果，不是两批固定公司——因此后文的组间差异不能解读为"同一批公司随时间的变动"，这与作业"描述性差异不能直接解释为产权的因果作用"一致。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8e318755">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b1b120b5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E4%BA%94%E3%80%81%E6%95%B0%E9%87%8F%E4%B8%8E%E4%BA%A7%E6%9D%83%E7%BB%93%E6%9E%84%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-1%EF%BC%89">五、数量与产权结构（作业输出 1）<a class="anchor-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E9%87%8F%E4%B8%8E%E4%BA%A7%E6%9D%83%E7%BB%93%E6%9E%84%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-1%EF%BC%89">¶</a></h2><p>逐年统计：房地产上市公司总数；国有、民营、其他、不明公司数量；国有与民营占当年房地产公司总数的比例。<strong>年度公司数去重计算，不因财务指标缺失删去公司</strong>。</p>
+<h2 id="%E4%BA%94%E3%80%81%E6%95%B0%E9%87%8F%E4%B8%8E%E4%BA%A7%E6%9D%83%E7%BB%93%E6%9E%84%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-1%EF%BC%89">五、数量与产权结构（作业输出 1）<a class="anchor-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E9%87%8F%E4%B8%8E%E4%BA%A7%E6%9D%83%E7%BB%93%E6%9E%84%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-1%EF%BC%89">¶</a></h2><p>逐年统计：房地产上市公司总数；国有、民营、其他、不明公司数量；国有与民营占当年房地产公司总数的比例。** 年度公司数去重计算，不因财务指标缺失删去公司**。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2ff5138f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c7c01272">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">OWN_ORDER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"国有"</span><span class="p">,</span><span class="s2">"民营"</span><span class="p">,</span><span class="s2">"其他"</span><span class="p">,</span><span class="s2">"不明"</span><span class="p">]</span>
@@ -8104,7 +8321,7 @@ prev  ownership
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8262,18 +8479,18 @@ prev  ownership
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6f61eb44">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=883c8a10">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：房地产 A 股上市公司从 2005 年的 <strong>62 家</strong>增至 2015 年的 <strong>134 家</strong>，扩容约 1.2 倍，2008—2012 年扩张最快（84→142 家）。产权结构上，<strong>国有占比从 58.1% 单调降至 46.3%</strong>（2005→2015），民营占比稳定在 37%—45%；"其他"类（以外资为主）从 2 家增至 13 家，反映 2009 年后外资与混合所有制开发商进入。国有与民营占比之和约 96%—99%，其余为其他与不明，符合作业"占比之和可以小于 100%"的设定。公司数在 2013—2015 年略有回落，主要是个别公司转出房地产（行业变更）与退市，属非平衡面板的正常进出。</p>
+<p><strong>解读</strong>：房地产 A 股上市公司从 2005 年的 <strong>62 家</strong> 增至 2015 年的 <strong>134 家</strong>，扩容约 1.2 倍，2008—2012 年扩张最快（84→142 家）。产权结构上，** 国有占比从 58.1% 单调降至 46.3%**（2005→2015），民营占比稳定在 37%—45%；"其他"类（以外资为主）从 2 家增至 13 家，反映 2009 年后外资与混合所有制开发商进入。国有与民营占比之和约 96%—99%，其余为其他与不明，符合作业"占比之和可以小于 100%"的设定。公司数在 2013—2015 年略有回落，主要是个别公司转出房地产（行业变更）与退市，属非平衡面板的正常进出。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0c71a2ae">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=66738870">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8301,11 +8518,11 @@ prev  ownership
 </tr>
 <tr>
 <td>ROA</td>
-<td>合并净利润 / <strong>平均</strong>总资产</td>
+<td>合并净利润 / ** 平均** 总资产</td>
 </tr>
 <tr>
 <td>ROE</td>
-<td>合并净利润 / <strong>平均</strong>所有者权益</td>
+<td>合并净利润 / ** 平均** 所有者权益</td>
 </tr>
 <tr>
 <td>Cash_TA</td>
@@ -8313,17 +8530,17 @@ prev  ownership
 </tr>
 </tbody>
 </table>
-<p>平均总资产（权益）=（上年末 + 本年末）/ 2，2005 年的上年末取 <strong>2004 年末</strong>独立导出数据。利润与权益均为合并口径，不混用归母净利润与含少数股东权益的总权益。现金持有用<strong>货币资金</strong>（区别于现金及现金等价物），短期负债用<strong>流动负债</strong>（区别于短期银行借款）。<strong>零分母、缺失一律返回缺失并计数，不填零、不删观测</strong>。</p>
-<p><strong>关于 bankloan 的字段选择</strong>：CSMAR 资产负债表中未单列"银行借款"明细（其"银行借款"科目属金融企业专用），因此采用主表 <code>A002101000 短期借款</code> 与 <code>A002201000 长期借款</code> 作为短期/长期银行借款的对应字段——这两个科目在 2005—2015 年一般企业的报表中以银行借款为主，可能含少量非银行金融机构借款；字段说明随导出保留，缺失不按零处理。</p>
+<p>平均总资产（权益）=（上年末 + 本年末）/ 2，2005 年的上年末取 <strong>2004 年末</strong> 独立导出数据。利润与权益均为合并口径，不混用归母净利润与含少数股东权益的总权益。现金持有用** 货币资金<strong>（区别于现金及现金等价物），短期负债用</strong> 流动负债<strong>（区别于短期银行借款）。</strong> 零分母、缺失一律返回缺失并计数，不填零、不删观测**。</p>
+<p>** 关于 bankloan 的字段选择**：CSMAR 资产负债表中未单列"银行借款"明细（其"银行借款"科目属金融企业专用），因此采用主表 <code>A002101000 短期借款</code> 与 <code>A002201000 长期借款</code> 作为短期/长期银行借款的对应字段——这两个科目在 2005—2015 年一般企业的报表中以银行借款为主，可能含少量非银行金融机构借款；字段说明随导出保留，缺失不按零处理。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5ac4f9b5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=272c5726">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">safe_div</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">den</span><span class="p">):</span>
@@ -8378,18 +8595,18 @@ prev  ownership
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3c2c92f2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8b5f73e9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：分母诊断显示六项指标的不可计算观测极少——ROA/ROE 各 9 个（全部是公司在面板中的首年，缺少上年末数据，属上市时点的结构性缺失，不填补、不用更早年份替代），bankloan 等其余指标无不可计算观测。杠杆类指标（资产负债率、bankloan、短期负债占比、Cash_TA）有效样本 1,175 个，几乎无损耗。</p>
+<p>** 解读**：分母诊断显示六项指标的不可计算观测极少——ROA/ROE 各 9 个（全部是公司在面板中的首年，缺少上年末数据，属上市时点的结构性缺失，不填补、不用更早年份替代），bankloan 等其余指标无不可计算观测。杠杆类指标（资产负债率、bankloan、短期负债占比、Cash_TA）有效样本 1,175 个，几乎无损耗。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3d385247">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bd91e113">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8398,19 +8615,19 @@ prev  ownership
 <h2 id="%E4%B8%83%E3%80%81%E5%85%AD%E9%A1%B9%E6%8C%87%E6%A0%87%E7%9A%84%E5%9B%9B%E7%B1%BB%E8%BE%93%E5%87%BA%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-2%E2%80%944%EF%BC%89">七、六项指标的四类输出（作业输出 2—4）<a class="anchor-link" href="#%E4%B8%83%E3%80%81%E5%85%AD%E9%A1%B9%E6%8C%87%E6%A0%87%E7%9A%84%E5%9B%9B%E7%B1%BB%E8%BE%93%E5%87%BA%EF%BC%88%E4%BD%9C%E4%B8%9A%E8%BE%93%E5%87%BA-2%E2%80%944%EF%BC%89">¶</a></h2><ol>
 <li>全部房地产企业历年均值与中位数时序图；</li>
 <li>国有和民营企业历年均值比较图；</li>
-<li>国有和民营企业历年<strong>中位数</strong>比较图；</li>
+<li>国有和民营企业历年** 中位数** 比较图；</li>
 <li>各指标对应的年度有效样本量表。</li>
 </ol>
-<p>注意：<strong>平均资产负债率为企业比率的算术平均</strong>，不是行业总负债除以总资产。</p>
+<p>注意：** 平均资产负债率为企业比率的算术平均**，不是行业总负债除以总资产。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=12b8ad08">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9673cc4f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">IND</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"leverage"</span><span class="p">,</span><span class="s2">"bankloan"</span><span class="p">,</span><span class="s2">"st_debt_ratio"</span><span class="p">,</span><span class="s2">"roa"</span><span class="p">,</span><span class="s2">"roe"</span><span class="p">,</span><span class="s2">"cash_ta"</span><span class="p">]</span>
@@ -8451,12 +8668,12 @@ prev  ownership
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=63db19ac">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=974a3d33">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">stat</span><span class="p">,</span> <span class="n">ttl</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"mean"</span><span class="p">,</span><span class="s2">"国有 vs 民营：历年均值"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"median"</span><span class="p">,</span><span class="s2">"国有 vs 民营：历年中位数"</span><span class="p">)]:</span>
@@ -8495,7 +8712,7 @@ prev  ownership
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8628,34 +8845,34 @@ prev  ownership
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1b8d7ac0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6286841f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读（均值 vs 中位数）</strong>：以资产负债率为例，全样本均值 0.62—0.80，而中位数稳定在 0.57—0.68——两者的缺口集中在 2005—2010 年，源于少数<strong>资不抵债</strong>公司（见第八节）；2011 年后两条线基本重合。ROA 中位数从 2005 年约 1.3% 升至 2010 年 4.1%，随后一路降至 2015 年 1.7%，与房地产行业毛利率下行、盈利分化加剧的宏观事实一致。<strong>国有 vs 民营</strong>：民营开发商的资产负债率中位数在整个样本期高于国有约 3—8 个百分点，且 2009 年"四万亿"后差距扩大；国有开发商 ROA 中位数在 2010—2013 年略高于民营，2014 年后被反超。描述性差异不构成产权的因果证据。</p>
+<p>** 解读（均值 vs 中位数）<strong>：以资产负债率为例，全样本均值 0.62—0.80，而中位数稳定在 0.57—0.68——两者的缺口集中在 2005—2010 年，源于少数</strong> 资不抵债** 公司（见第八节）；2011 年后两条线基本重合。ROA 中位数从 2005 年约 1.3% 升至 2010 年 4.1%，随后一路降至 2015 年 1.7%，与房地产行业毛利率下行、盈利分化加剧的宏观事实一致。** 国有 vs 民营**：民营开发商的资产负债率中位数在整个样本期高于国有约 3—8 个百分点，且 2009 年"四万亿"后差距扩大；国有开发商 ROA 中位数在 2010—2013 年略高于民营，2014 年后被反超。描述性差异不构成产权的因果证据。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fdc659c0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2cc828a4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E5%85%AD%E4%B9%8B%E4%BA%8C%E3%80%81%E4%BC%9A%E8%AE%A1%E6%81%92%E7%AD%89%E5%BC%8F%E6%A0%B8%E6%9F%A5%EF%BC%88%E8%B5%84%E4%BA%A7-=-%E8%B4%9F%E5%80%BA-+-%E6%89%80%E6%9C%89%E8%80%85%E6%9D%83%E7%9B%8A%EF%BC%89">六之二、会计恒等式核查（资产 = 负债 + 所有者权益）<a class="anchor-link" href="#%E5%85%AD%E4%B9%8B%E4%BA%8C%E3%80%81%E4%BC%9A%E8%AE%A1%E6%81%92%E7%AD%89%E5%BC%8F%E6%A0%B8%E6%9F%A5%EF%BC%88%E8%B5%84%E4%BA%A7-=-%E8%B4%9F%E5%80%BA-+-%E6%89%80%E6%9C%89%E8%80%85%E6%9D%83%E7%9B%8A%EF%BC%89">¶</a></h2><p><strong>要回答的问题</strong>：合并报表的三大板块是否自洽；若不自洽，是否集中在特定公司或特定状态（如资不抵债）。</p>
-<p><strong>做法</strong>：逐条计算 <code>资产总计 −（负债合计 + 所有者权益合计）</code>，以 <strong>1% 相对容差</strong>判定是否在容差内；超出容差的观测全部保留并列出，不自动删除。</p>
+<h2 id="%E5%85%AD%E4%B9%8B%E4%BA%8C%E3%80%81%E4%BC%9A%E8%AE%A1%E6%81%92%E7%AD%89%E5%BC%8F%E6%A0%B8%E6%9F%A5%EF%BC%88%E8%B5%84%E4%BA%A7-=-%E8%B4%9F%E5%80%BA-+-%E6%89%80%E6%9C%89%E8%80%85%E6%9D%83%E7%9B%8A%EF%BC%89">六之二、会计恒等式核查（资产 = 负债 + 所有者权益）<a class="anchor-link" href="#%E5%85%AD%E4%B9%8B%E4%BA%8C%E3%80%81%E4%BC%9A%E8%AE%A1%E6%81%92%E7%AD%89%E5%BC%8F%E6%A0%B8%E6%9F%A5%EF%BC%88%E8%B5%84%E4%BA%A7-=-%E8%B4%9F%E5%80%BA-+-%E6%89%80%E6%9C%89%E8%80%85%E6%9D%83%E7%9B%8A%EF%BC%89">¶</a></h2><p>** 要回答的问题**：合并报表的三大板块是否自洽；若不自洽，是否集中在特定公司或特定状态（如资不抵债）。</p>
+<p>** 做法<strong>：逐条计算 <code>资产总计 −（负债合计 + 所有者权益合计）</code>，以 **1% 相对容差</strong> 判定是否在容差内；超出容差的观测全部保留并列出，不自动删除。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=328c494d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=945f39ce">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">nm</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">"Stkcd"</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"Stkcd"</span><span class="p">)[</span><span class="s2">"ShortName"</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
@@ -8706,35 +8923,35 @@ prev  ownership
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f56daecc">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3884a33d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：<strong>99.7%（1,171/1,175）</strong>的观测满足 <code>资产 ≈ 负债 + 所有者权益</code>（1% 容差内），说明三大板块自洽、单位统一为元、口径未混用，合并与字段映射没有系统性错误。</p>
+<p><strong>解读</strong>：<strong>99.7%（1,171/1,175）</strong> 的观测满足 <code>资产 ≈ 负债 + 所有者权益</code>（1% 容差内），说明三大板块自洽、单位统一为元、口径未混用，合并与字段映射没有系统性错误。</p>
 <p>超出容差的仅 <strong>4 条</strong>（占 0.3%）：*ST 寰岛 2011—2014 年偏离 1.4%—2.1%。<strong>这 4 条的权益均为正</strong>——也就是说失衡不是资不抵债造成的，而是个别公司个别年份的科目列示差异（如少数股东权益的列示口径）或源数据本身的板块不平。处理：保留观测、不修改数值、不删除，并在样本处理表与局限中如实说明——0.3% 的量级不足以影响任何逐年结论。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8af4eeb6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6a143431">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E5%85%AB%E3%80%81%E7%A6%BB%E7%BE%A4%E5%80%BC%E6%A3%80%E6%9F%A5%E4%B8%8E%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E6%AF%94%E8%BE%83">八、离群值检查与处理前后比较<a class="anchor-link" href="#%E5%85%AB%E3%80%81%E7%A6%BB%E7%BE%A4%E5%80%BC%E6%A3%80%E6%9F%A5%E4%B8%8E%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E6%AF%94%E8%BE%83">¶</a></h2><p><strong>检查结论</strong>：极端比率全部来自<strong>负权益（资不抵债）公司</strong>，属真实经济状况而非技术错误——数值已与公司年报口径交叉核验（如万科、荣安地产）。典型：大洲兴业连续 7 年负权益、中润资源 2006 年资产负债率 877（资产 22 万元 vs 负债 1.95 亿元）。</p>
-<p><strong>处理</strong>：全部<strong>保留观测并标识</strong>（<code>flag_neg_equity</code>、<code>flag_lev_gt1</code>），不删除、不缩尾（缩尾非必做）；同时给出剔除负权益观测前后的对照，检验结论是否稳健。</p>
+<h2 id="%E5%85%AB%E3%80%81%E7%A6%BB%E7%BE%A4%E5%80%BC%E6%A3%80%E6%9F%A5%E4%B8%8E%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E6%AF%94%E8%BE%83">八、离群值检查与处理前后比较<a class="anchor-link" href="#%E5%85%AB%E3%80%81%E7%A6%BB%E7%BE%A4%E5%80%BC%E6%A3%80%E6%9F%A5%E4%B8%8E%E5%A4%84%E7%90%86%E5%89%8D%E5%90%8E%E6%AF%94%E8%BE%83">¶</a></h2><p>** 检查结论<strong>：极端比率全部来自</strong> 负权益（资不抵债）公司**，属真实经济状况而非技术错误——数值已与公司年报口径交叉核验（如万科、荣安地产）。典型：大洲兴业连续 7 年负权益、中润资源 2006 年资产负债率 877（资产 22 万元 vs 负债 1.95 亿元）。</p>
+<p>** 处理<strong>：全部</strong> 保留观测并标识**（<code>flag_neg_equity</code>、<code>flag_lev_gt1</code>），不删除、不缩尾（缩尾非必做）；同时给出剔除负权益观测前后的对照，检验结论是否稳健。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=dee40a0e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3ef79d4a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">panel</span><span class="p">[</span><span class="s2">"flag_neg_equity"</span><span class="p">]</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="s2">"equity"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
@@ -8745,7 +8962,33 @@ prev  ownership
     <span class="n">负权益观测</span><span class="o">=</span><span class="p">(</span><span class="s2">"flag_neg_equity"</span><span class="p">,</span><span class="s2">"sum"</span><span class="p">),</span> <span class="n">资产负债率超1</span><span class="o">=</span><span class="p">(</span><span class="s2">"flag_lev_gt1"</span><span class="p">,</span><span class="s2">"sum"</span><span class="p">),</span>
     <span class="n">观测数</span><span class="o">=</span><span class="p">(</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"size"</span><span class="p">))</span>
 <span class="n">neg_tab</span><span class="p">[</span><span class="s2">"负权益占比%"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">neg_tab</span><span class="p">[</span><span class="s2">"负权益观测"</span><span class="p">]</span><span class="o">/</span><span class="n">neg_tab</span><span class="p">[</span><span class="s2">"观测数"</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 明细表一：逐年负权益公司清单（带简称，比单纯计数更直观）</span>
+<span class="n">neg_detail</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">panel</span><span class="p">[</span><span class="s2">"flag_neg_equity"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"fiscal_year"</span><span class="p">,</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"equity"</span><span class="p">,</span><span class="s2">"leverage"</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">neg_detail</span><span class="p">[</span><span class="s2">"简称"</span><span class="p">]</span> <span class="o">=</span> <span class="n">neg_detail</span><span class="p">[</span><span class="s2">"Stkcd"</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span>
+<span class="n">neg_detail</span><span class="p">[</span><span class="s2">"资产负债率"</span><span class="p">]</span> <span class="o">=</span> <span class="n">neg_detail</span><span class="p">[</span><span class="s2">"leverage"</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">neg_detail</span><span class="p">[</span><span class="s2">"所有者权益(万元)"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">neg_detail</span><span class="p">[</span><span class="s2">"equity"</span><span class="p">]</span><span class="o">/</span><span class="mf">1e4</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">neg_detail</span> <span class="o">=</span> <span class="n">neg_detail</span><span class="p">[[</span><span class="s2">"fiscal_year"</span><span class="p">,</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"简称"</span><span class="p">,</span><span class="s2">"资产负债率"</span><span class="p">,</span><span class="s2">"所有者权益(万元)"</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"fiscal_year"</span><span class="p">,</span><span class="s2">"Stkcd"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"【逐年负权益公司明细】"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">neg_detail</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【逐年计数汇总】"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">neg_tab</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+
+<span class="c1"># 明细表二：三张时序图中「跃起点」的元凶公司（均值被哪几个观测抬高）</span>
+<span class="n">spike_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">2009</span><span class="p">,</span><span class="s2">"leverage"</span><span class="p">,</span><span class="s2">"资产负债率"</span><span class="p">),</span> <span class="p">(</span><span class="mi">2010</span><span class="p">,</span><span class="s2">"roe"</span><span class="p">,</span><span class="s2">"ROE"</span><span class="p">),</span> <span class="p">(</span><span class="mi">2007</span><span class="p">,</span><span class="s2">"roa"</span><span class="p">,</span><span class="s2">"ROA"</span><span class="p">)]:</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="n">panel</span><span class="p">[</span><span class="s2">"fiscal_year"</span><span class="p">]</span> <span class="o">==</span> <span class="n">y</span><span class="p">]</span>
+    <span class="n">m_all</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+        <span class="n">m_ex</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">Index</span><span class="p">)[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="n">spike_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"跃点年"</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="s2">"指标"</span><span class="p">:</span> <span class="n">lbl</span><span class="p">,</span> <span class="s2">"代码"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">Stkcd</span><span class="p">,</span> <span class="s2">"简称"</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">Stkcd</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+                           <span class="s2">"该观测值"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">ind</span><span class="p">)),</span> <span class="mi">2</span><span class="p">),</span>
+                           <span class="s2">"该年均值"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m_all</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                           <span class="s2">"剔除该观测后均值"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m_ex</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                           <span class="s2">"对均值的拉动"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">m_all</span> <span class="o">-</span> <span class="n">m_ex</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span>
+<span class="n">spike_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">spike_rows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【跃起点归因：抬升该年均值的最大三个观测】"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">spike_df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
 <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">IND</span><span class="p">:</span>
@@ -8772,7 +9015,30 @@ prev  ownership
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>             负权益观测  资产负债率超1  观测数  负权益占比%
+<pre>【逐年负权益公司明细】
+ fiscal_year  Stkcd     简称  资产负债率  所有者权益(万元)
+        2005 000592 *ST 昌源   2.72   -43609.0
+        2005 600053  ST 江纸   1.65   -10327.0
+        2005 600603  ST 兴业   7.79   -43139.0
+        2006 000592 *ST 昌源   2.94   -52177.0
+        2006 600603  ST 兴业   4.04   -38557.0
+        2007 000007   深达声A   1.01     -836.0
+        2007 000592 *ST 昌源   1.81   -14313.0
+        2007 600603  ST 兴业   9.77   -30437.0
+        2008 000007   深达声A   1.12    -7487.0
+        2008 600603  ST 兴业  18.14   -27324.0
+        2009 000007   深达声A   1.15    -5445.0
+        2009 600603  ST 兴业  55.41   -27008.0
+        2010 000056    深国商   1.10   -15005.0
+        2010 600603  ST 兴业   8.64   -27532.0
+        2010 600766  ST 烟发   1.08    -3335.0
+        2011 000056    深国商   1.25   -38781.0
+        2011 600766  ST 烟发   1.08    -3925.0
+        2012 000056    深国商   1.20   -40503.0
+        2015 000505  ST 珠江   1.14   -23319.0
+
+【逐年计数汇总】
+             负权益观测  资产负债率超1  观测数  负权益占比%
 fiscal_year                             
 2005             3        3   62     4.8
 2006             2        2   66     3.0
@@ -8785,11 +9051,23 @@ fiscal_year
 2013             0        0  135     0.0
 2014             0        0  132     0.0
 2015             1        1  134     0.7
+
+【跃起点归因：抬升该年均值的最大三个观测】
+ 跃点年    指标     代码     简称  该观测值  该年均值  剔除该观测后均值  对均值的拉动
+2009 资产负债率 600603  ST 兴业 55.41 1.170     0.599   0.571
+2009 资产负债率 000007   深达声A  1.15 1.170     1.170  -0.000
+2009 资产负债率 000628   倍特高新  0.94 1.170     1.172  -0.002
+2010   ROE 000056    深国商 38.04 0.391     0.082   0.309
+2010   ROE 000979   科苑集团  1.18 0.391     0.384   0.006
+2010   ROE 600223   万杰高科  0.48 0.391     0.390   0.001
+2007   ROA 000592 *ST 昌源  1.70 0.083     0.060   0.023
+2007   ROA 600603  ST 兴业  1.01 0.083     0.070   0.013
+2007   ROA 600840   新湖创业  0.18 0.083     0.082   0.001
 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9070,34 +9348,66 @@ fiscal_year
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=762a8364">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=af7fe607">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：负权益观测每年 0—3 个（占比 1.6%—4.8%）。它们对<strong>均值</strong>影响显著——资产负债率 2005—2009 年被推高 0.07—0.58（2009 年全样本均值 1.17，剔除后 0.59）；对<strong>中位数</strong>几乎无影响（差异 ≤0.005）。ROE 受影响更小的原因是分母（平均权益）在亏损年份同步收缩。因此本报告的时序解读以中位数为主：剔除前后，"国有杠杆低于民营、行业 ROA 自 2010 年见顶回落"两个核心结论均不变，结果稳健。</p>
+<p><strong>解读</strong>：负权益观测每年 0—3 个（占比 1.6%—4.8%），明细已列出公司名——它们不是数据处理错误，而是真实资不抵债的公司（所有者权益为负，多为 ST/壳公司）。它们对** 均值** 影响显著（资产负债率 2005—2009 年被推高 0.07—0.58，2009 年全样本均值 1.17、剔除后 0.59），对** 中位数** 几乎无影响（差异 ≤0.005）。因此时序解读以中位数为主。</p>
+<p>** 三张图中"跃起点"的逐一归因（不是数据处理问题，是少数极端观测拉高了均值）**：</p>
+<table>
+<thead>
+<tr>
+<th>跃起点</th>
+<th>元凶观测（当年简称，现名）</th>
+<th>机制</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009 年资产负债率均值 <strong>1.17</strong>（&gt;1）</td>
+<td><strong>ST 兴业</strong>（现大洲兴业）55.41，** 单独拉动 +0.571**；深达声A（现全新好）1.15</td>
+<td>两者权益为负（−2.7 亿、−5,445 万）：负债 &gt; 资产，比率必然大于 1。不是计算错误，而是资不抵债的** 数学后果**</td>
+<td>真实财务状况，保留；以中位数（0.63）解读当年水平</td>
+</tr>
+<tr>
+<td>2010 年 ROE 均值 <strong>0.39</strong></td>
+<td>** 深国商<strong>（现皇庭国际）38.04，</strong> 单独拉动 +0.309**；科苑集团（现中弘股份）1.18</td>
+<td>深国商权益 <strong>−1.5 亿</strong>、净利润 <strong>−2.8 亿</strong>：** 分子分母同为负 → ROE 为正且数值巨大**，是负权益在比率型指标上的典型陷阱，不代表任何盈利能力</td>
+<td>数学假象，保留但明确警示；ROE 时序一律以中位数为准</td>
+</tr>
+<tr>
+<td>2007 年 ROA 均值 <strong>0.083</strong></td>
+<td>***ST 昌源<strong>（现平潭发展）1.70（净利润 3.78 亿 &gt; 总资产 1.77 亿），拉动 +0.023；</strong>ST 兴业** 1.01，拉动 +0.013；新湖创业 0.18</td>
+<td>2007 年新会计准则实施首年，债务重组收益由资本公积改计** 利润表**；借壳/重组中的壳公司资产规模极小、一次性收益巨大</td>
+<td>真实但属一次性事件；当年 9 家公司 ROA&gt;0.1，中位数仅 0.047</td>
+</tr>
+</tbody>
+</table>
+<p>** 结论<strong>：三处跃起均由少数极端观测驱动，且机制清楚（负权益导致比率异常、2007 年准则切换带来一次性收益）。数据本身无误，处理是</strong> 保留观测 + 标识 + 用中位数与剔除后均值作对照**。剔除前后，"国有杠杆低于民营、行业 ROA 自 2010 年见顶回落"两个核心结论均不变。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1d5e1091">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=561a73dd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E5%85%AB%E4%B9%8B%E4%BA%8C%E3%80%81%E6%8C%87%E6%A0%87%E7%AA%81%E5%8F%98%E7%9A%84%E9%80%90%E5%B9%B4%E5%BD%92%E5%9B%A0">八之二、指标突变的逐年归因<a class="anchor-link" href="#%E5%85%AB%E4%B9%8B%E4%BA%8C%E3%80%81%E6%8C%87%E6%A0%87%E7%AA%81%E5%8F%98%E7%9A%84%E9%80%90%E5%B9%B4%E5%BD%92%E5%9B%A0">¶</a></h2><p><strong>要回答的问题</strong>：某一年指标突变，究竟是<strong>离群值</strong>（资不抵债公司）、<strong>异常分母</strong>、<strong>样本进出</strong>（新上市/退市）还是<strong>产权变更</strong>造成的。</p>
-<p><strong>做法</strong>：以资产负债率为例，逐年给出全样本均值，并分别给出"剔除当年新进入样本的公司""剔除负权益观测""剔除当年发生产权变更的公司"后的均值，比较各自的贡献。</p>
+<h2 id="%E5%85%AB%E4%B9%8B%E4%BA%8C%E3%80%81%E6%8C%87%E6%A0%87%E7%AA%81%E5%8F%98%E7%9A%84%E9%80%90%E5%B9%B4%E5%BD%92%E5%9B%A0">八之二、指标突变的逐年归因<a class="anchor-link" href="#%E5%85%AB%E4%B9%8B%E4%BA%8C%E3%80%81%E6%8C%87%E6%A0%87%E7%AA%81%E5%8F%98%E7%9A%84%E9%80%90%E5%B9%B4%E5%BD%92%E5%9B%A0">¶</a></h2><p>** 要回答的问题<strong>：某一年指标突变，究竟是</strong> 离群值<strong>（资不抵债公司）、</strong> 异常分母<strong>、</strong> 样本进出<strong>（新上市/退市）还是</strong> 产权变更** 造成的。</p>
+<p>** 做法**：以资产负债率为例，逐年给出全样本均值，并分别给出"剔除当年新进入样本的公司""剔除负权益观测""剔除当年发生产权变更的公司"后的均值，比较各自的贡献。</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7866df1f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f3783159">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"Stkcd"</span><span class="p">,</span><span class="s2">"fiscal_year"</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -9133,7 +9443,7 @@ fiscal_year
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9260,22 +9570,22 @@ fiscal_year
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=66c8733e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d10c2498">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>解读</strong>：三个来源的贡献量级清晰可分——</p>
-<p>① <strong>负权益（离群值）</strong>：主导了 2005—2010 年的均值虚高，2009 年把均值抬高 <strong>0.577</strong>（1.170 → 剔除后 0.593），2008 年 0.216、2007 年 0.150；2013 年后归零。这与第八节的敏感性结论完全一致。</p>
-<p>② <strong>样本进出</strong>：2008—2012 年每年有 12—28 家公司新进入样本，但贡献<strong>基本为负值且绝对不超过 0.09</strong>（2009 年 −0.092）——即新进入公司反而拉低了行业均值，说明"扩容"没有系统性推高杠杆。</p>
-<p>③ <strong>产权变更</strong>：除 2009 年外，单年贡献均小于 0.01，量级最小。2009 年 0.571 的异常高值并非独立来源——它与负权益的贡献几乎相等（剔除后均值分别回到 0.599 与 0.593），说明<strong>两者指向同一批公司</strong>（当年同时具备资不抵债与产权变更特征）。</p>
-<p><strong>结论</strong>：均值层面的突变由少数资不抵债公司驱动，样本进出方向相反、产权变更量级极小，因此以中位数为主的结论稳健；同时再次印证——国有/民营的组间差异要按"当年处于该组的公司"理解，而非同一批公司的时间序列。</p>
+<p>** 解读**：三个来源的贡献量级清晰可分——</p>
+<p>① ** 负权益（离群值）<strong>：主导了 2005—2010 年的均值虚高，2009 年把均值抬高 **0.577</strong>（1.170 → 剔除后 0.593），2008 年 0.216、2007 年 0.150；2013 年后归零。这与第八节的敏感性结论完全一致。</p>
+<p>② ** 样本进出<strong>：2008—2012 年每年有 12—28 家公司新进入样本，但贡献</strong> 基本为负值且绝对不超过 0.09**（2009 年 −0.092）——即新进入公司反而拉低了行业均值，说明"扩容"没有系统性推高杠杆。</p>
+<p>③ ** 产权变更<strong>：除 2009 年外，单年贡献均小于 0.01，量级最小。2009 年 0.571 的异常高值并非独立来源——它与负权益的贡献几乎相等（剔除后均值分别回到 0.599 与 0.593），说明</strong> 两者指向同一批公司**（当年同时具备资不抵债与产权变更特征）。</p>
+<p>** 结论**：均值层面的突变由少数资不抵债公司驱动，样本进出方向相反、产权变更量级极小，因此以中位数为主的结论稳健；同时再次印证——国有/民营的组间差异要按"当年处于该组的公司"理解，而非同一批公司的时间序列。</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf69e2de">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=69b411be">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9285,12 +9595,12 @@ fiscal_year
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3a081841">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=86842bb2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">flow</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
@@ -9319,7 +9629,7 @@ fiscal_year
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9431,46 +9741,46 @@ fiscal_year
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3b5bd599">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=936563d1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E5%8D%81%E3%80%81%E6%80%BB%E4%BD%93%E7%BB%93%E8%AE%BA">十、总体结论<a class="anchor-link" href="#%E5%8D%81%E3%80%81%E6%80%BB%E4%BD%93%E7%BB%93%E8%AE%BA">¶</a></h2><p><strong>主要发现（串联全篇）</strong>：</p>
+<h2 id="%E5%8D%81%E3%80%81%E6%80%BB%E4%BD%93%E7%BB%93%E8%AE%BA">十、总体结论<a class="anchor-link" href="#%E5%8D%81%E3%80%81%E6%80%BB%E4%BD%93%E7%BB%93%E8%AE%BA">¶</a></h2><p>** 主要发现（串联全篇）**：</p>
 <ol>
-<li><p><strong>规模扩张与产权结构变迁</strong>：房地产 A 股上市公司从 2005 年 62 家增至 2015 年 134 家；国有占比从 58.1% 单调降至 46.3%，民营稳定在 37%—45%——行业扩容主要由民营与外资开发商贡献。</p>
+<li><p>** 规模扩张与产权结构变迁**：房地产 A 股上市公司从 2005 年 62 家增至 2015 年 134 家；国有占比从 58.1% 单调降至 46.3%，民营稳定在 37%—45%——行业扩容主要由民营与外资开发商贡献。</p>
 </li>
-<li><p><strong>杠杆水平与结构</strong>：资产负债率中位数稳定在 0.57—0.68；民营开发商中位数高于国有 3—8 个百分点，2009 年后扩大。bankloan（银行借款/总负债）与短期负债占比显示，民营开发商更依赖银行短期资金。</p>
+<li><p>** 杠杆水平与结构**：资产负债率中位数稳定在 0.57—0.68；民营开发商中位数高于国有 3—8 个百分点，2009 年后扩大。bankloan（银行借款/总负债）与短期负债占比显示，民营开发商更依赖银行短期资金。</p>
 </li>
-<li><p><strong>盈利见顶回落</strong>：ROA 中位数 2010 年约 4.1% 见顶，2015 年降至 1.7%；同期 Cash_TA（货币资金/总资产）上升，行业从扩张转向囤现金，与 2012 年后调控收紧、库存分化的宏观背景一致。</p>
+<li><p>** 盈利见顶回落**：ROA 中位数 2010 年约 4.1% 见顶，2015 年降至 1.7%；同期 Cash_TA（货币资金/总资产）上升，行业从扩张转向囤现金，与 2012 年后调控收紧、库存分化的宏观背景一致。</p>
 </li>
-<li><p><strong>离群值的真相</strong>：全部极端比率来自负权益的 ST/重组壳公司（占比 1.6%—4.8%），剔除前后中位数几乎不变、均值显著变化——因此以中位数为主的结论稳健。</p>
+<li><p>** 离群值的真相**：全部极端比率来自负权益的 ST/重组壳公司（占比 1.6%—4.8%），剔除前后中位数几乎不变、均值显著变化——因此以中位数为主的结论稳健。</p>
 </li>
-<li><p><strong>分组不是固定公司集合</strong>：23 家公司在样本期内发生过产权变更（5 次国有→民营、2 次民营→国有），国有组与民营组是逐年重分类的结果；另有 223 条资产负债表、185 条利润表观测来自差错更正后的版本。因此组间与跨期差异应理解为「当年处于该组的公司」的横截面差异，不能读作同一批公司的时间序列。</p>
+<li><p>** 分组不是固定公司集合**：23 家公司在样本期内发生过产权变更（5 次国有→民营、2 次民营→国有），国有组与民营组是逐年重分类的结果；另有 223 条资产负债表、185 条利润表观测来自差错更正后的版本。因此组间与跨期差异应理解为「当年处于该组的公司」的横截面差异，不能读作同一批公司的时间序列。</p>
 </li>
-<li><p><strong>样本口径决定结论质量</strong>：若按 CSMAR 当前分类的静态代码池（117 家）取样，2005 年覆盖率仅 62%，会系统性低估行业早期规模与国有占比；改为动态并集（170 家）后各年覆盖 97%—99%。</p>
+<li><p>** 样本口径决定结论质量**：若按 CSMAR 当前分类的静态代码池（117 家）取样，2005 年覆盖率仅 62%，会系统性低估行业早期规模与国有占比；改为动态并集（170 家）后各年覆盖 97%—99%。</p>
 </li>
 </ol>
-<p><strong>关键处理判断</strong>：合并报表+年末+A 股三步筛选；行业逐年判定（2001 版 J* / 2012 版 K70 映射）；产权四类映射（非国有≠民营）；零/负分母返回缺失不填零；离群值保留并标识；ST/暂停上市保留。</p>
+<p>** 关键处理判断**：合并报表+年末+A 股三步筛选；行业逐年判定（2001 版 J* / 2012 版 K70 映射）；产权四类映射（非国有≠民营）；零/负分母返回缺失不填零；离群值保留并标识；ST/暂停上市保留。</p>
 <p><strong>局限</strong>：</p>
 <ul>
-<li><strong>数据</strong>：CSMAR 未标注金额币种与单位的完整说明，单位"元"系经年报数值核验；行业分类依赖 CSMAR 年度表的填充规则；产权字段缺失者（招商积余）只能归入不明。</li>
-<li><strong>方法</strong>：描述性统计不构成产权对企业行为的因果证据；均值对负权益观测敏感，已用中位数与敏感性比较缓解；平均分母口径下 2005 年 ROA/ROE 依赖 2004 年末数据的质量。</li>
-<li><strong>样本</strong>：A 股口径剔除了 5 家 B 股房地产公司；面板以"有年末合并报表"定义在市状态，暂停上市期间无报表的年份自然缺席。</li>
+<li>** 数据**：CSMAR 未标注金额币种与单位的完整说明，单位"元"系经年报数值核验；行业分类依赖 CSMAR 年度表的填充规则；产权字段缺失者（招商积余）只能归入不明。</li>
+<li>** 方法**：描述性统计不构成产权对企业行为的因果证据；均值对负权益观测敏感，已用中位数与敏感性比较缓解；平均分母口径下 2005 年 ROA/ROE 依赖 2004 年末数据的质量。</li>
+<li>** 样本**：A 股口径剔除了 5 家 B 股房地产公司；面板以"有年末合并报表"定义在市状态，暂停上市期间无报表的年份自然缺席。</li>
 </ul>
 <hr/>
 <h2 id="AI-%E4%BD%BF%E7%94%A8%E5%A3%B0%E6%98%8E">AI 使用声明<a class="anchor-link" href="#AI-%E4%BD%BF%E7%94%A8%E5%A3%B0%E6%98%8E">¶</a></h2><ul>
-<li><strong>工具</strong>：WorkBuddy（Hermes Agent，Claude 模型）。</li>
-<li><strong>参与环节</strong>：作业口径核对（从课件仓库历史版本恢复 hw-02 作业页面原文）；CSMAR 导出清单设计与站内路径指引；字段映射与清洗代码编写（<code>code/build_panel.py</code>、<code>code/make_outputs.py</code> 及本 Notebook）；逐年行业判定规则设计与样本缺口对账；图表生成；本文档起草。</li>
-<li><strong>关键提示词（节选）</strong>：<ol>
+<li>** 工具**：WorkBuddy（Hermes Agent，Claude 模型）。</li>
+<li>** 参与环节**：作业口径核对（从课件仓库历史版本恢复 hw-02 作业页面原文）；CSMAR 导出清单设计与站内路径指引；字段映射与清洗代码编写（<code>code/build_panel.py</code>、<code>code/make_outputs.py</code> 及本 Notebook）；逐年行业判定规则设计与样本缺口对账；图表生成；本文档起草。</li>
+<li>** 关键提示词（节选）**：<ol>
 <li>"检查是否严格符合：自行从 CSMAR 下载 2005—2015 年房地产 A 股上市公司年度数据……分类标准跨年变化时说明映射方式"——促成 12 条逐条自检并补齐上市状态、下载清单与字段对应表；</li>
 <li>"为什么我在数据库中看的是 123 家而你这里有 170 个"——促成静态代码池与动态并集的对账，发现并修复 66 家公司的样本缺口。</li>
 </ol>
 </li>
-<li><strong>本人核验过程</strong>：全部 CSMAR 原始文件由本人登录导出并核对导出条件；抽查万科 2015 年资产总计、长期借款、净利润与公开年报一致（单位=元）；确认面板无上市前观测、无退市后观测；逐年公司数与年度表房地产数逐一对账（覆盖 97%—99%，缺者均为 B 股）。</li>
-<li><strong>修正过的问题</strong>（由 AI 辅助发现并修复）：① 首次导出的行业分类表是变更事件表而非年度快照，无法判定逐年行业，改用基本信息年度表；② 行业判定最初沿用 J 前缀，会把 2012 版金融业（J66—J69）误判为房地产，已改为按年份分标准；③ 按当前分类导出的财务数据池缺 66 家中途转出房地产的公司，2005 年覆盖率仅 62%，已按动态并集补导；④ 早期股权性质与 2004 年末表只覆盖旧代码池，已按 170 家清单补导；⑤ 短期借款/长期借款科目编码首次抽查时用错（A002202000 → A002201000），已按字段说明修正。</li>
-<li><strong>未发现问题的部分</strong>：资产负债表与利润表的主键唯一性、两表覆盖一致性（未匹配 0）、合并报表与年末记录的筛选逻辑、六指标公式实现、以及各年有效样本量表均经复核未发现问题。对话链接略（无法分享，不编造）。</li>
+<li>** 本人核验过程**：全部 CSMAR 原始文件由本人登录导出并核对导出条件；抽查万科 2015 年资产总计、长期借款、净利润与公开年报一致（单位=元）；确认面板无上市前观测、无退市后观测；逐年公司数与年度表房地产数逐一对账（覆盖 97%—99%，缺者均为 B 股）。</li>
+<li>** 修正过的问题**（由 AI 辅助发现并修复）：① 首次导出的行业分类表是变更事件表而非年度快照，无法判定逐年行业，改用基本信息年度表；② 行业判定最初沿用 J 前缀，会把 2012 版金融业（J66—J69）误判为房地产，已改为按年份分标准；③ 按当前分类导出的财务数据池缺 66 家中途转出房地产的公司，2005 年覆盖率仅 62%，已按动态并集补导；④ 早期股权性质与 2004 年末表只覆盖旧代码池，已按 170 家清单补导；⑤ 短期借款/长期借款科目编码首次抽查时用错（A002202000 → A002201000），已按字段说明修正。</li>
+<li>** 未发现问题的部分**：资产负债表与利润表的主键唯一性、两表覆盖一致性（未匹配 0）、合并报表与年末记录的筛选逻辑、六指标公式实现、以及各年有效样本量表均经复核未发现问题。对话链接略（无法分享，不编造）。</li>
 </ul>
 </div>
 </div>

@@ -4,7 +4,7 @@
 - 作业页面：<https://lianxhcn.github.io/FinEco/exercises/hw-02.html>
 - 截止：2026-09-28 23:59（北京时间）
 - 所属仓库：<https://github.com/Jaremy112/fineco-homework>（本目录 `hw02-1/`）
-- 进度：Notebook `hw02-1.ipynb` **全部 8 节已完成**（57 单元，9 张图 + 31 张表，已运行并保存输出）
+- 进度：Notebook `hw02-1.ipynb` **全部 8 节已完成**（59 单元，9 张图 + 31 张表，已运行并保存输出）
 
 本目录保存 HW02-1 的全部输入快照、下载脚本、审计文件和分析 Notebook。所有路径均为相对路径，复现时不依赖重新调用网络接口。
 

@@ -76,18 +76,30 @@ print("各股票预期窗口数与实际有效窗口数之差（跨期收益导�
 print(lost[lost > 0].to_string())
 print("合计损失窗口数:", int(lost.sum()))"""))
 
-cells.append(nbf.v4.new_code_cell("""# 图4：各股票 20 日滚动年化波动率时序
-fig, ax = plt.subplots(figsize=(14, 7))
-for code in order:
+cells.append(nbf.v4.new_code_cell("""# 图4：各股票 20 日滚动年化波动率——按股票分面板（2 行 × 5 列，每只股票一张子图）
+fig, axes = plt.subplots(2, 5, figsize=(20, 8), sharex=True)
+vmax = float(vol["vol20"].max() * 100)      # 统一 y 轴上限，便于横向比较水平高低
+for ax_i, code in zip(axes.ravel(), order):
     sub = vol[vol["stock_code"] == code]
-    ax.plot(sub["date"], sub["vol20"] * 100, label=names[code], color=colors[code], linewidth=1.1)
-ax.set_title("图4  20个交易日滚动年化波动率（2021-01-04 至 2026-09-16，单位：%）", fontsize=13)
-ax.set_xlabel("日期")
-ax.set_ylabel("年化波动率（%）")
-ax.legend(ncol=5, fontsize=9, loc="upper left")
-ax.grid(alpha=0.3)
+    ax_i.plot(sub["date"], sub["vol20"] * 100, color=colors[code], linewidth=1.0)
+    ax_i.set_title(f"{names[code]}（{code}）", fontsize=11)
+    ax_i.set_ylim(0, vmax + 3)
+    ax_i.grid(alpha=0.3)
+    ax_i.tick_params(labelsize=9)
+fig.suptitle("图4  20个交易日滚动年化波动率（分股票面板，2021-01-04 至 2026-09-16，单位：%）",
+             fontsize=14, y=1.02)
+fig.supylabel("年化波动率（%）", fontsize=12)
 fig.tight_layout()
-plt.show()"""))
+plt.show()
+
+# 各股票波动率水平排序：分面板后不便横向比较，用这张表补足
+vol_rank = (vol.groupby("stock_code")
+            .agg(简称=("stock_name", "first"), 滚动均值=("vol20", "mean"),
+                 滚动中位=("vol20", "median"), 滚动最大=("vol20", "max"))
+            .reindex(order))
+for c in ["滚动均值", "滚动中位", "滚动最大"]:
+    vol_rank[c] = (vol_rank[c] * 100).round(2)
+vol_rank.sort_values("滚动均值", ascending=False)"""))
 
 cells.append(nbf.v4.new_code_cell("""# 图5：等权组合的滚动波动率与个股波动率均值对比（分散化效应）
 # 等权组合日收益：每日对各股票可用收益取平均（停牌日该股缺失，等价于在剩余股票间等权）
@@ -121,7 +133,7 @@ cells.append(nbf.v4.new_markdown_cell("""### Step 3：Markdown结果解读
 
 图5给出了本节最有价值的一个证据：**等权组合的全期年化波动率为20.70%，不但低于10只个股的均值33.52%，甚至低于个股中波动最小的一只（招商银行26.82%）**，组合波动率仅为个股均值的0.618倍。原因是各股票的日收益不完全同步，涨跌相互抵消，这正是分散投资降低风险的作用；也要注意，这里的"降低"指的是波动率这一风险度量，不等于组合不会亏损。
 
-把第3节的累计净值与本节波动率放在一起看：隆基绿能波动第二高（42.48%）而累计净值最低（0.2412），招商银行波动最低（26.82%）而净值第二高（1.2259），两者方向相反；但比亚迪是个反例——波动第三高（39.11%）却取得最高净值（1.3399）。因此在这个10只股票的样本里，**高波动并没有系统性地换来高收益**，收益与风险的关系更接近"部分股票承担了高波动却没有相应回报"。这只是事后样本的描述性观察：股票池是按行业与商业模式事先选定的，不是按风险因子构建的，且只有10只样本，不能据此推断风险与收益的一般关系，更不涉及因果。
+把第3节的累计净值与本节波动率放在一起看：隆基绿能波动第二高（42.48%）而累计净值最低（0.2412），招商银行波动最低（26.82%）而净值第二高（1.2259），两者方向相反；但比亚迪是个反例——波动第三高（39.11%）却取得最高净值（1.3399）。因此在这个10只股票的样本里，** 高波动并没有系统性地换来高收益**，收益与风险的关系更接近"部分股票承担了高波动却没有相应回报"。这只是事后样本的描述性观察：股票池是按行业与商业模式事先选定的，不是按风险因子构建的，且只有10只样本，不能据此推断风险与收益的一般关系，更不涉及因果。
 
 处理规则的代价也已经量化：因窗口内含跨期收益而不计算的窗口共40个（顺丰控股、中信证券各20个），占理论窗口数的0.3%，对整体结论没有实质影响。
 

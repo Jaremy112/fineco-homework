@@ -3,7 +3,7 @@
 - 姓名：朱家瑞
 - 作业页面：<https://lianxhcn.github.io/FinEco/exercises/hw-02.html>
 - 所属仓库：<https://github.com/Jaremy112/fineco-homework>（本目录 `hw02-2/`）
-- 进度：Notebook `hw02-2.ipynb` **全部完成**（35 单元，4 张图 + 多张表，已运行、0 报错）
+- 进度：Notebook `hw02-2.ipynb` **全部完成**（37 单元，4 张图 + 多张表，已运行、0 报错）
 
 ## 1. 数据来源
 
