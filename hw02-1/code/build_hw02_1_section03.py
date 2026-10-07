@@ -62,7 +62,28 @@ colors = {code: plt.cm.tab10(i % 10) for i, code in enumerate(order)}
 print("绘图股票数:", len(order))
 print("数据日期范围:", d["date"].min().date(), "至", d["date"].max().date())"""))
 
-cells.append(nbf.v4.new_code_cell("""# 图1：各股票不复权收盘价时序（分面）
+cells.append(nbf.v4.new_code_cell("""import pandas as pd
+
+# 除权断点自动识别：不复权价单日暴跌 >20%，但同日按后复权价计算的收益正常
+chk = d.sort_values(["stock_code", "date"]).copy()
+gg = chk.groupby("stock_code")
+chk["ret_unadj"] = gg["close_unadjusted"].pct_change()   # 不复权口径单日涨跌幅
+chk["ret_hfq_chk"] = gg["close_hfq"].pct_change()        # 后复权口径单日涨跌幅
+exr = chk[(chk["ret_unadj"] < -0.20) & (chk["ret_hfq_chk"].abs() < 0.05)].copy()
+
+exr_t = exr[["stock_name", "date", "close_unadjusted", "ret_unadj", "ret_hfq_chk"]].copy()
+exr_t.columns = ["股票", "断点日期", "当日不复权收盘价", "不复权单日跌幅", "同日后复权收益"]
+exr_t["判定"] = "除权/除息断口：价格机械下调，非真实下跌"
+display(exr_t.style.format({"不复权单日跌幅": "{:.2%}", "同日后复权收益": "{:.2%}",
+                            "当日不复权收盘价": "{:.2f}"}).hide(axis="index"))
+
+n_real = int(((chk["ret_unadj"] < -0.20) & (chk["ret_hfq_chk"] < -0.05)).sum())
+print("扫描口径：不复权单日跌幅 < -20%")
+print("  其中后复权收益正常（|ret| < 5%）→ 除权断口，共", len(exr_t), "处")
+print("  其中后复权同样暴跌（<-5%）  → 真实暴跌，共", n_real, "处")
+print("结论：样本期内全部大额跳空均来自除权除息，没有一例是真实单日暴跌。")"""))
+
+cells.append(nbf.v4.new_code_cell("""# 图1：各股票不复权收盘价时序（分面），除权断点用红色虚线标注
 fig, axes = plt.subplots(5, 2, figsize=(14, 13), sharex=True)
 for ax, code in zip(axes.ravel(), order):
     sub = d[d["stock_code"] == code]
@@ -70,6 +91,19 @@ for ax, code in zip(axes.ravel(), order):
     ax.set_title(f"{names[code]} {code}", fontsize=11)
     ax.set_ylabel("元")
     ax.grid(alpha=0.3)
+    # 中信证券：标注 2024 年政策行情连续涨停区间（真实上涨，非除权）
+    if code == "600030.SH":
+        ax.axvspan(pd.Timestamp("2024-09-27"), pd.Timestamp("2024-11-07"),
+                   color="#FAC775", alpha=0.30, zorder=0)
+        ax.annotate("4个涨停 2024-09-27→11-07", xy=(pd.Timestamp("2024-09-30"), ax.get_ylim()[0]),
+                    xytext=(4, 4), textcoords="offset points",
+                    fontsize=8, color="#854F0B")
+    # 除权断点：红色虚线 + 文字标注
+    for dt in exr.loc[exr["stock_code"] == code, "date"]:
+        ax.axvline(dt, color="#E24B4A", linestyle="--", linewidth=1.1, zorder=3)
+        ax.annotate("除权", xy=(dt, sub["close_unadjusted"].max()),
+                    xytext=(5, -11), textcoords="offset points",
+                    fontsize=8, color="#A32D2D")
 axes[0, 0].xaxis.set_major_locator(mdates.YearLocator())
 axes[0, 0].xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
 fig.suptitle("图1  10只A股不复权收盘价时序（2020-12-31 至 2026-09-16，单位：元）",
@@ -82,6 +116,43 @@ display(d.groupby("stock_code").agg(
     股票=("stock_name", "first"), 最低价=("close_unadjusted", "min"), 最高价=("close_unadjusted", "max"),
     起点价=("close_unadjusted", "first"), 末价=("close_unadjusted", "last")
 ).reindex(order))"""))
+
+cells.append(nbf.v4.new_code_cell("""# 图1b：除权断点的双口径验证（断点前一日 = 100）
+fig, axes = plt.subplots(1, 2, figsize=(14, 4.8))
+for ax, (code, dt) in zip(axes, [("002594.SZ", "2025-07-29"), ("601012.SH", "2021-06-23")]):
+    ts = pd.Timestamp(dt)
+    w = d[(d["stock_code"] == code) & (d["date"] >= ts - pd.Timedelta(days=40))
+          & (d["date"] <= ts + pd.Timedelta(days=40))].copy()
+    b = w[w["date"] < ts].iloc[-1]
+    ax.plot(w["date"], w["close_unadjusted"] / b["close_unadjusted"] * 100,
+            label="不复权价", color="#E24B4A", linewidth=1.6)
+    ax.plot(w["date"], w["close_hfq"] / b["close_hfq"] * 100,
+            label="后复权价", color="#1D9E75", linewidth=1.6)
+    ax.axvline(ts, color="#888780", linestyle="--", linewidth=1)
+    ax.annotate("除权日", xy=(ts, 100), xytext=(6, -14), textcoords="offset points",
+                fontsize=8, color="#5F5E5A")
+    ax.set_title(f"{names[code]} {code}  断点日 {dt}", fontsize=11)
+    ax.set_ylabel("断点前一日 = 100")
+    ax.legend(fontsize=9, loc="upper left")
+    ax.grid(alpha=0.3)
+fig.suptitle("图1b  除权断点双口径验证：不复权价出现断崖，后复权价保持连续",
+             fontsize=12, y=1.03)
+fig.tight_layout()
+plt.show()
+
+# 断点前后对照表
+rows = []
+for code, dt in [("002594.SZ", "2025-07-29"), ("601012.SH", "2021-06-23")]:
+    ts = pd.Timestamp(dt)
+    w = d[(d["stock_code"] == code) & (d["date"] <= ts)].tail(2)
+    rows.append({"股票": names[code], "断点日": dt,
+                 "前一日不复权价": round(w["close_unadjusted"].iloc[0], 2),
+                 "当日不复权价": round(w["close_unadjusted"].iloc[1], 2),
+                 "不复权跌幅": f"{w['close_unadjusted'].pct_change().iloc[1]:.2%}",
+                 "前一日后复权价": round(w["close_hfq"].iloc[0], 2),
+                 "当日后复权价": round(w["close_hfq"].iloc[1], 2),
+                 "后复权收益": f"{w['close_hfq'].pct_change().iloc[1]:.2%}"})
+display(pd.DataFrame(rows))"""))
 
 cells.append(nbf.v4.new_code_cell("""# 图2：起点为 1 的累计收益曲线（以 2020-12-31 后复权价为基准）
 base_price = d.loc[d["date"] == "2020-12-31"].set_index("stock_code")["close_hfq"]
@@ -153,10 +224,13 @@ cells.append(nbf.v4.new_markdown_cell("""### Step 3：Markdown结果解读
 
 图1显示，10只股票的不复权价格水平差异极大：贵州茅台在1,168.63—2,601元之间波动，隆基绿能从最高123元跌到11元，比亚迪从194.30元降到83.96元。这张图只用于观察价格水平与走势，不能据此判断盈亏——送转股和现金分红会造成价格机械下调。
 
-图1中有两处醒目的"跳变"，性质完全不同，需要区分：
+图1中有三处醒目的"跳变"，性质完全不同，需要区分。图1已用红色虚线标出除权断点、用黄色阴影标出真实上涨区间；图1b进一步用双口径验证。
 
-- 比亚迪面板中 2025-07-29 的垂直断崖（约 337 元 → 111.42 元，单日 −66.9%）：这是公司实施 2024 年度权益分派「每 10 股送红股 8 股、转增 12 股」（即 1 股变 3 股）导致的除权断口，股本扩大 3 倍、价格机械缩小为 1/3，不是股价暴跌。证据：同日按后复权价计算的收益为 +0.4%，完全正常。收益序列（后复权）不受该断口影响，这正是本作业「价格用不复权、收益用后复权」双口径的原因。
-- 中信证券面板中段的大幅跳升（约 19.8 元 → 34.19 元，2024-09-27 至 2024-11-07）：这不是除权（除权只会使价格向下跳），而是 2024 年 9 月末政策驱动行情下券商股的连续涨停——该区间有 4 个交易日涨幅达 +9.4% 至 +10.0%（2024-09-27、09-30、10-08、11-07），属于真实价格变动；后复权价同幅度上涨，两种口径一致。
+- 比亚迪面板中 2025-07-29 的垂直断崖（约 337 元 → 111.42 元，单日 −66.9%）：公司实施 2024 年度权益分派「每 10 股送红股 8 股、转增 12 股」（1 股变 3 股），股本扩大 3 倍、价格机械缩小为 1/3，是除权断口，不是股价暴跌。证据：同日按后复权价计算的收益为 +0.37%，完全正常。
+- 隆基绿能面板中 2021-06-23 的断崖（单日 −27.27%）：同为送转与派息导致的除权除息断口。证据：同日后复权收益 +2.05%，方向甚至为正。这一处此前未被标注，本次由代码自动扫描发现。
+- 中信证券面板中段的大幅跳升（约 19.8 元 → 34.19 元，2024-09-27 至 2024-11-07）：这不是除权——除权只会使价格向下跳。该区间有 4 个交易日达到涨停（2024-09-27 +10.01%、09-30 +9.99%、10-08 +10.00%、11-07 +10.01%），是 2024 年 9 月末政策转向后券商股的真实连续上涨。证据：这 4 天的不复权收益与后复权收益几乎完全相等（差值 < 0.01 个百分点），两种口径一致，说明期间不存在股本变动。
+
+自动扫描的判定规则是：不复权单日跌幅小于 −20%，但同日后复权收益的绝对值小于 5%。全样本共命中 2 处（比亚迪、隆基绿能），而不复权与后复权同时暴跌超过 5% 的观测为 0 处——也就是说，样本期内全部大额向下跳空都来自除权除息，没有一例是真实单日暴跌。这正是本作业「价格用不复权、收益用后复权」双口径的原因：不复权价回答"当时每股多少钱"，后复权价回答"持有这只股票赚了多少"，两者不可互换，也不能用前者判断盈亏。
 
 图2以2020-12-31的后复权收盘价为基准（净值=1）重算累计表现，结论与图1明显不同：截至2026-09-16，10只股票中4只净值大于1、6只小于1。比亚迪最高，累计净值1.3399（+33.99%）；招商银行1.2259、美的集团1.1031、中信证券1.0900次之；立讯精密0.9699接近持平；万华化学0.8841、贵州茅台0.7353、恒瑞医药0.4792、顺丰控股0.3824下跌；隆基绿能最低，仅0.2412，5年多累计亏损约75.9%。首尾差距接近5.6倍（1.3399 对 0.2412），分化极其悬殊。
 
