@@ -141,73 +141,103 @@ fig.tight_layout()
 plt.show()"""))
 
 # ---------------- B. 均值-方差最优权重 ----------------
-cells.append(nbf.v4.new_code_cell("""# B. 均值-方差最优权重（全样本估计，事后最优，仅作上界参考）
+cells.append(nbf.v4.new_code_cell("""# B. 均值-方差最优权重（最小方差 + 做多约束的最大夏普；解析切线解在此样本退化，仅作诊断）
+from scipy.optimize import minimize
+
 Rm = R.dropna(how="any")            # 10 只股票都有收益的交易日
 print("协方差估计样本：%d 个交易日（占全样本 %.1f%%）" % (len(Rm), 100 * len(Rm) / len(R)))
 
 Sigma = Rm.cov().values * 252       # 年化协方差
-mu = Rm.mean().values * 252         # 年化期望收益
+mu = Rm.mean().values * 252         # 年化期望收益（算术）
 n = len(mu)
 one = np.ones(n)
 inv = np.linalg.inv(Sigma)
 
 w_mv = inv @ one / (one @ inv @ one)                    # 最小方差组合
+
 exc = mu - RF
-w_tan = inv @ exc / (one @ inv @ exc)                   # 切线组合（最大夏普，允许做空）
+denom = one @ inv @ exc
+print("\\n解析切线组合的分母 1'Σ⁻¹(μ−rf) = %.4f" % denom)
+w_tan = inv @ exc / denom
+if denom < 0:
+    print("分母为负：样本期内10只股票的整体超额收益为负（隆基 −17.6%、顺丰 −12.6%、")
+    print("恒瑞 −7.2%、茅台 −3.6% 跑输 rf=2%），解析切线公式在此退化——它给出的不是")
+    print("最大夏普而是最小夏普组合。教科书公式隐含前提 1'Σ⁻¹(μ−rf) > 0，此处不成立。")
+    print("改用做多约束（权重 ≥ 0、和为 1）的数值优化求最大夏普组合。")
+
+def neg_sharpe(w):
+    rp = Rm.values @ w
+    return -(rp.mean() * 252 - RF) / (rp.std() * np.sqrt(252))
+
+res = minimize(neg_sharpe, np.repeat(1 / n, n), method="SLSQP",
+               bounds=[(0, 1)] * n,
+               constraints=[{"type": "eq", "fun": lambda w: w.sum() - 1}])
+w_ms = res.x                                             # 最大夏普组合（做多约束）
 
 def perf(w, tag):
     rp = Rm.values @ w
-    g = (1 + rp).prod() ** (252 / len(rp)) - 1
+    arith = rp.mean() * 252
     v = rp.std() * np.sqrt(252)
-    return {"权重方案": tag, "年化收益": g, "年化波动": v, "夏普比率": (g - RF) / v,
-            "最大权重": w.max(), "最小权重": w.min(), "负权重个数": int((w < 0).sum())}
+    g = (1 + rp).prod() ** (252 / len(rp)) - 1
+    return {"权重方案": tag, "算术年化收益": arith, "几何年化收益": g, "年化波动": v,
+            "夏普比率": (arith - RF) / v, "最大权重": w.max(), "负权重个数": int((w < 0).sum())}
 
 w_ew_v = np.repeat(0.1, n)
 w_vw_v = w_vw.iloc[-1].reindex(Rm.columns).fillna(0).values
 w_vw_v = w_vw_v / w_vw_v.sum()
 
-mv_tbl = pd.DataFrame([perf(w_ew_v, "等权 0.1"),
-                       perf(w_vw_v, "市值加权（期末权重）"),
-                       perf(w_mv, "最小方差组合"),
-                       perf(w_tan, "切线组合（最大夏普，允许做空）")])
-display(mv_tbl.style.format({"年化收益": "{:.2%}", "年化波动": "{:.2%}", "夏普比率": "{:.3f}",
-                             "最大权重": "{:.2%}", "最小权重": "{:.2%}"}).hide(axis="index"))
+rows = [perf(w_ew_v, "等权 0.1"),
+        perf(w_vw_v, "市值加权（期末权重）"),
+        perf(w_mv, "最小方差组合"),
+        perf(w_ms, "最大夏普（做多约束）")]
+if denom < 0:
+    rows.append(perf(w_tan, "解析切线（分母<0，病态解）"))
+mv_tbl = pd.DataFrame(rows)
+display(mv_tbl.style.format({"算术年化收益": "{:.2%}", "几何年化收益": "{:.2%}", "年化波动": "{:.2%}",
+                             "夏普比率": "{:.3f}", "最大权重": "{:.2%}"}).hide(axis="index"))
+print("口径说明：夏普比率统一用算术年化收益计算；杠杆组合的几何年化会被大额亏损压到 −100% 地板，失去可比性。")
 
-w_cmp = pd.DataFrame({"等权": w_ew_v, "市值加权": w_vw_v, "最小方差": w_mv, "切线组合": w_tan},
+w_cmp = pd.DataFrame({"等权": w_ew_v, "市值加权": w_vw_v, "最小方差": w_mv,
+                      "最大夏普(做多)": w_ms, "解析切线(病态)": w_tan},
                      index=[names[c] for c in Rm.columns]) * 100
 display(w_cmp.round(2))"""))
 
-cells.append(nbf.v4.new_code_cell("""# 图10：有效前沿与四个权重方案的位置
+cells.append(nbf.v4.new_code_cell("""# 图12：有效前沿与四种可行权重方案（算术年化口径；解析切线解退化，不入图）
 rng = np.random.default_rng(20261007)
 sim_w = rng.dirichlet(np.ones(n), size=4000)
 sim_r = sim_w @ mu
 sim_v = np.sqrt(np.einsum("ij,jk,ik->i", sim_w, Sigma, sim_w))
 
 fig, ax = plt.subplots(figsize=(11, 7))
-ax.scatter(sim_v * 100, sim_r * 100, s=4, color="#B4B2A9", alpha=0.35, label="随机权重组合（4,000 组）")
+ax.scatter(sim_v * 100, sim_r * 100, s=4, color="#B4B2A9", alpha=0.35, label="随机做多组合（4,000 组）")
 pts = [("等权", w_ew_v, "#1D9E75"), ("市值加权", w_vw_v, "#378ADD"),
-       ("最小方差", w_mv, "#D85A30"), ("切线组合", w_tan, "#534AB7")]
+       ("最小方差", w_mv, "#D85A30"), ("最大夏普(做多)", w_ms, "#534AB7")]
+sh_ms = None
 for tag, w, col in pts:
     rp = Rm.values @ w
-    g = (1 + rp).prod() ** (252 / len(rp)) - 1
+    arith = rp.mean() * 252
     v = rp.std() * np.sqrt(252)
-    ax.scatter(v * 100, g * 100, s=90, color=col, zorder=5, edgecolor="white", linewidth=1.2)
-    ax.annotate(tag, (v * 100, g * 100), textcoords="offset points", xytext=(8, 6),
+    if tag == "最大夏普(做多)":
+        sh_ms = (arith - RF) / v
+    ax.scatter(v * 100, arith * 100, s=90, color=col, zorder=5, edgecolor="white", linewidth=1.2)
+    ax.annotate(tag, (v * 100, arith * 100), textcoords="offset points", xytext=(8, 6),
                 fontsize=10, color=col)
+# 从 rf 出发经过做多约束最优点的射线（近似资本市场线）
 xs = np.linspace(0, sim_v.max() * 100 * 1.05, 100)
-ax.plot(xs, (RF + (mu - RF).T @ w_tan / (w_tan @ Sigma @ w_tan) * (xs / 100)) * 100,
-        color="#534AB7", linestyle="--", linewidth=1.2, label="资本市场线（rf=2%）")
+ax.plot(xs, (RF + sh_ms * xs / 100) * 100, color="#534AB7", linestyle="--",
+        linewidth=1.2, label="从 rf 出发经最优点（近似 CML）")
 ax.scatter(0, RF * 100, s=70, color="#5F5E5A", zorder=5)
 ax.annotate("无风险 2%", (0, RF * 100), textcoords="offset points", xytext=(8, -12), fontsize=9)
+ax.annotate("解析切线组合不入图：归一化分母为负，解退化为最小夏普组合\\n（算术年化 -409%、年化波动 394%、几何年化触及 -100% 地板）",
+            xy=(0.98, 0.03), xycoords="axes fraction", ha="right", va="bottom",
+            fontsize=9, color="#534AB7")
 ax.set_xlabel("年化波动率 %")
-ax.set_ylabel("几何年化收益率 %")
-ax.set_title("图12  有效前沿与四种权重方案（全样本估计，事后最优）", fontsize=13)
+ax.set_ylabel("算术年化收益率 %")
+ax.set_title("图12  有效前沿与四种可行权重方案（全样本估计，事后最优）", fontsize=13)
 ax.legend(fontsize=9, loc="upper left")
 ax.grid(alpha=0.3)
 fig.tight_layout()
-plt.show()
-
-print("说明：切线组合允许做空，负权重在数学上成立但 A 股个券做空成本高，故只作上界参考。")"""))
+plt.show()"""))
 
 # ---------------- A. 现金混合配置 ----------------
 cells.append(nbf.v4.new_code_cell("""# A. 无风险资产混合配置（不存在前视问题）
@@ -237,9 +267,9 @@ cells.append(nbf.v4.new_markdown_cell("""### Step 3：Markdown结果解读
 
 分散化的时变性：滚动 60 日平均相关系数均值 0.308，最低 0.122，最高 0.626。在 2024 年 9 月末政策行情中升至 0.512、2025 年 4 月外部关税冲击时升至 0.449。这说明第 1 节"行业分散"带来的低相关是常态下的性质，不是危机时的保险：市场剧烈波动时个股倾向于同涨同跌，分散化效果会明显衰减。这正是只用全样本平均相关系数会低估风险的原因，也是第 6 节静态相关矩阵的局限。
 
-均值-方差最优权重：最小方差组合只依赖协方差矩阵，权重相对温和（最大 20.84% 招行、最小 2.61% 隆基），年化波动低于等权与市值加权。切线组合则完全不同——它要求输入期望收益，得到的权重极端到没有实践意义：顺丰控股 +603%、隆基绿能 +450%，同时比亚迪 −502%、招商银行 −317%。这个结果本身就是一条重要结论：均值-方差优化对期望收益的估计误差高度敏感，10 只股票 5 年多的日频数据，期望收益的标准误远大于其横截面差异，优化器会把微小的估计差异放大成巨大的权重（文献中称为"估计误差放大器"）。因此这两个权重都只能作为理论基准，不构成配置建议。
+均值-方差最优权重：最小方差组合只依赖协方差矩阵，权重相对温和（最大 20.84% 招行、最小 2.61% 隆基），年化波动低于等权与市值加权。做多约束下的最大夏普组合权重向样本期内超额收益为正的个股集中，夏普高于三种基准组合，但它同样依赖对期望收益与协方差的估计。真正值得展开的是解析切线解的退化：教科书公式 w ∝ Σ⁻¹(μ−rf) 的归一化分母 1'Σ⁻¹(μ−rf) 在本样本为 −0.27，小于零——样本期内隆基（−17.6%）、顺丰（−12.6%）、恒瑞（−7.2%）、茅台（−3.6%）四只股票跑输 2% 的无风险利率，10 只股票的整体超额收益为负。此时公式给出的不是最大夏普而是最小夏普组合：算术年化 −409%、年化波动 394%、几何年化被大额亏损压到 −100% 的地板（净值趋近于零），在图12 的坐标系里完全无法显示，故不入图。这暴露了教科书公式很少强调的前提：只有当 1'Σ⁻¹(μ−rf) > 0 时它才是"最大"夏普组合。实务中的处理是加做多约束用数值优化求解，本节即采用这一做法。
 
-等权与市值加权的价值恰恰在这里：它们不做任何优化，不需要估计期望收益和协方差，因而不受估计误差影响。在样本量有限（10 只股票、约 1,380 个交易日）的条件下，"不估计"往往比"估计后再优化"更稳健。这是本节四种权重并列的用意——不是要找出最优解，而是说明最优解有多脆弱。
+等权与市值加权的价值恰恰在这里：它们不做任何优化，不需要估计期望收益和协方差，因而不受估计误差影响，也踩不到解析解的退化陷阱。在样本量有限（10 只股票、约 1,380 个交易日）且整体超额收益为负的条件下，"不估计"往往比"估计后再优化"更稳健。这是本节几种权重并列的用意——不是要找出最优解，而是说明最优解有多脆弱、多依赖前提。
 
 无风险资产混合：把股票比例从 100% 降到 20%，年化波动近乎线性下降，夏普比率随之上升。但必须看清这里的机制——样本期内两个股票组合的年化收益都低于 2% 的无风险利率，所以混入现金提高夏普的原因是"少亏"，不是"多赚"。资产配置的功能是让组合波动匹配风险承受力，它不能改善底层选股的质量。"""))
 
